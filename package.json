@@ -1,0 +1,43 @@
+{
+  "name": "henckels-automation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test:smoke": "codeceptjs run --grep @smoke",
+    "test:regression": "codeceptjs run --grep @regression",
+    "test:next": "NODE_ENV=next codeceptjs run",
+    "test:staging": "NODE_ENV=staging codeceptjs run",
+    "test:prod": "NODE_ENV=prod codeceptjs run",
+    "test:mobile": "SCREEN_SIZE=mobile codeceptjs run",
+    "test:tablet": "SCREEN_SIZE=tablet codeceptjs run",
+    "test:desktop": "SCREEN_SIZE=desktop codeceptjs run",
+    "test:parallel": "codeceptjs run-multiple parallel",
+    "test:multi-device": "codeceptjs run-multiple multi_device",
+    "test:headless": "HEADLESS=true codeceptjs run",
+    "report:generate": "allure generate output/allure-results --clean",
+    "report:open": "allure open reports/allure-report",
+    "test:docker": "docker-compose up --build --abort-on-container-exit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@anthropic-ai/sdk": "^0.54.0",
+    "@codeceptjs/allure-legacy": "^1.0.2",
+    "@faker-js/faker": "^9.8.0",
+    "@playwright/test": "^1.53.1",
+    "@types/jest": "^30.0.0",
+    "allure-codeceptjs": "^3.2.2",
+    "allure-commandline": "^2.34.0",
+    "codeceptjs": "^3.5.15",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.5.0",
+    "mailslurp-client": "^15.24.1",
+    "nodemailer": "^7.0.3",
+    "playwright": "^1.40.0"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  }
+}
