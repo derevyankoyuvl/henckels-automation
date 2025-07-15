@@ -300,33 +300,4 @@ module.exports = {
       throw new Error(`Cart state validation failed: ${error.message}`);
     }
   },
-
-  // // Actions and methods for the cart page
-
-  // // Navigate to the CheckOut page
-  // proceedToCheckout() {
-  //   I.click(this.checkoutgBtn);
-  // },
-
-  // // Verify the cart is displayed
-  // verifyCartTotal(expectedTotal) {
-  //   I.see(expectedTotal, this.total);
-  // },
-
-  // // Verify the cart is displayed
-  // verifyItemInCart(productName) {
-  //   I.see(productName, this.itemName);
-  // },
-
-  // // Verify empty card message is displayed
-  // verifyEmptyCart() {
-  //   I.seeElement(this.emptyCartMessage);
-  //   I.see("Your cart is empty");
-  // },
-
-  // // Verify that the cart page is loaded
-  // async verifyCartDialogLoaded() {
-  //   I.seeElement(this.cartContainer);
-  //   I.seeElement(this.cartItems);
-  // },
 };

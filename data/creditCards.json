@@ -1,0 +1,44 @@
+{
+    "visa": {
+      "number": "4111111111111111",
+      "expiryDate": "03/30",
+      "cvv": "737",
+      "cardholderName": "John Doe"
+    },
+    "mastercard": {
+      "number": "5555555555554444",
+      "expiryDate": "03/30",
+      "cvv": "737",
+      "cardholderName": "Jane Smith"
+    },
+    "amex": {
+      "number": "378282246310005",
+      "expiryDate": "03/30",
+      "cvv": "7373",
+      "cardholderName": "Robert Johnson"
+    },
+    "discover": {
+      "number": "6011111111111117",
+      "expiryDate": "03/30",
+      "cvv": "737",
+      "cardholderName": "Maria Garcia"
+    },
+    "jcb": {
+      "number": "3530111333300000",
+      "expiryDate": "03/30",
+      "cvv": "737",
+      "cardholderName": "Hiroshi Tanaka"
+    },
+    "diners": {
+      "number": "30569309025904",
+      "expiryDate": "03/30",
+      "cvv": "737",
+      "cardholderName": "Pierre Dubois"
+    },
+    "unionpay": {
+      "number": "6200000000000005",
+      "expiryDate": "03/30",
+      "cvv": "737",
+      "cardholderName": "Li Wei"
+    }
+  }

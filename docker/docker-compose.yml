@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  tests:
+    build: .
+    environment:
+      - NODE_ENV=staging
+      - HEADLESS=true
+      - SCREEN_SIZE=desktop
+    volumes:
+      - ./output:/app/output
+      - ./reports:/app/reports

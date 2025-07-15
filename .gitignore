@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Test outputs
+output/
+reports/
+allure-results/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+.env.local
+
+#codecept.ai 
+henckels-automation/codecept.ai.js

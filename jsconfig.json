@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "target": "ES2020",
+    "module": "commonjs"
+  },
+  "exclude": ["node_modules/**", "output/**", "reports/**", "**/*.d.ts"],
+  "include": ["tests/**/*", "pages/**/*", "helpers/**/*", "*.js"]
+}
