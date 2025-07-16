@@ -5,87 +5,58 @@ const { I } = inject();
  */
 class Navigation {
   constructor() {
-    // Locators organized by logical sections
-    this.header = {
-      navigation: "header.sticky",
-      categoryLinks: "header.sticky  li  a",
-      skipToMain: "#uw-skip-to-main",
-      openNav: '//button[contains(text(), "Open Navigation")]',
-      searchButton: '//button[@data-sid="menu_quicksearch"]',
-      searchDialog: '[role="dialog"]',
-      searchInput: '//input[@data-sid="menu_search_input"]',
-      accountMenu: '//button[@data-sid="menu_account"]',
-      signIn: '//a[@data-sid="menu_signin"]',
-      signUp: '//a[@data-sid="menu_register"]',
-      cartIcon: '//button[@data-sid="menu_cart"]',
-      logo: '//a[@data-sid="menu_logohome"]',
-      accountMenuTitle: '//h1[contains(text(), "CREATE AN ACCOUNT")]',
-    };
+    // Header locators
+    this.navigation = "header.sticky";
+    this.categoryLinks = "header.sticky  li  a";
+    this.skipToMain = "#uw-skip-to-main";
+    this.openNav = '//button[contains(text(), "Open Navigation")]';
+    this.searchButton = '//button[@data-sid="menu_quicksearch"]';
+    this.searchDialog = '[role="dialog"]';
+    this.searchInput = '//input[@data-sid="menu_search_input"]';
+    this.accountMenu = '//button[@data-sid="menu_account"]';
+    this.signIn = '//a[@data-sid="menu_signin"]';
+    this.signUp = '//a[@data-sid="menu_register"]';
+    this.cartIcon = '//button[@data-sid="menu_cart"]';
+    this.logo = '//a[@data-sid="menu_logohome"]';
+    this.accountMenuTitle = '//h1[contains(text(), "CREATE AN ACCOUNT")]';
 
-    this.footer = {
-      root: "#reduced-footer",
-      contactLink: '//a[contains(text(), "Contact us here!")]',
-      shippingInfo: '//a[contains(text(), "Shipping Information")]',
-      accessibility: "#userway_widget_trigger",
-    };
+    // Footer locators
+    this.footerRoot = "#reduced-footer";
+    this.contactLink = '//a[contains(text(), "Contact us here!")]';
+    this.shippingInfo = '//a[contains(text(), "Shipping Information")]';
+    this.accessibility = "#userway_widget_trigger";
   }
 
   // Account Management Methods
   async openAccountMenu() {
-    try {
-      await I.waitForElement(this.header.accountMenu);
-      I.click(this.header.accountMenu);
-    } catch (error) {
-      throw new Error(`Failed to open account menu: ${error.message}`);
-    }
+    await I.waitForElement(this.accountMenu);
+    I.click(this.accountMenu);
   }
 
   async openSignUpPage() {
-    try {
-      await this.openAccountMenu();
-      await I.waitForElement(this.header.signUp);
-      I.click(this.header.signUp);
-      await I.waitForElement(this.header.accountMenuTitle);
-    } catch (error) {
-      throw new Error(`Failed to open sign up page: ${error.message}`);
-    }
+    await this.openAccountMenu();
+    await I.waitForElement(this.signUp);
+    I.click(this.signUp);
+    await I.waitForElement(this.accountMenuTitle);
   }
 
   async openSignInPage() {
-    try {
-      await this.openAccountMenu();
-      await I.waitForElement(this.header.signIn);
-      I.click(this.header.signIn);
-    } catch (error) {
-      throw new Error(`Failed to open sign in page: ${error.message}`);
-    }
+    await this.openAccountMenu();
+    await I.waitForElement(this.signIn);
+    I.click(this.signIn);
   }
 
   // Search Methods
   async openSearchDialog() {
-    try {
-      await I.waitForElement(this.header.searchButton);
-      I.click(this.header.searchButton);
-      await I.waitForElement(this.header.searchDialog);
-    } catch (error) {
-      throw new Error(`Failed to open search dialog: ${error.message}`);
-    }
+    await I.waitForElement(this.searchButton);
+    I.click(this.searchButton);
+    await I.waitForElement(this.searchDialog);
   }
 
   async enterSearchQuery(query) {
-    try {
-      if (!query || query.trim() === "") {
-        throw new Error("Search query cannot be empty");
-      }
-
-      await I.waitForElement(this.header.searchInput);
-      I.fillField(this.header.searchInput, query);
-      I.pressKey("Enter");
-    } catch (error) {
-      throw new Error(
-        `Failed to enter search query "${query}": ${error.message}`
-      );
-    }
+    await I.waitForElement(this.searchInput);
+    I.fillField(this.searchInput, query);
+    I.pressKey("Enter");
   }
 
   async performSearch(query) {
@@ -105,84 +76,45 @@ class Navigation {
   async getAvailableCategoriesFromHeader() {
     const categories = [];
 
-    try {
-      const categoryTexts = await I.grabTextFromAll(this.header.categoryLinks);
-      const categoryHrefs = await I.grabAttributeFromAll(
-        this.header.categoryLinks,
-        "href"
-      );
+    const categoryTexts = await I.grabTextFromAll(this.categoryLinks);
+    const categoryHrefs = await I.grabAttributeFromAll(
+      this.categoryLinks,
+      "href"
+    );
 
-      for (let i = 0; i < categoryTexts.length; i++) {
-        let selectorCategoryName = this.toTitleCase(categoryTexts[i].trim());
-        categories.push({
-          name: categoryTexts[i].trim(),
-          url: categoryHrefs[i],
-          selector: `//span[contains(text(), '${selectorCategoryName}')]`,
-          index: i,
-        });
-      }
-      return categories;
-    } catch (error) {
-      console.log("❌ Error getting categories:", error.message);
-      return [];
+    for (let i = 0; i < categoryTexts.length; i++) {
+      let selectorCategoryName = this.toTitleCase(categoryTexts[i].trim());
+      categories.push({
+        name: categoryTexts[i].trim(),
+        url: categoryHrefs[i],
+        selector: `//span[contains(text(), '${selectorCategoryName}')]`,
+        index: i,
+      });
     }
+    return categories;
   }
 
   async openCategory(categoryIndex) {
-    try {
-      const categories = await this.getAvailableCategoriesFromHeader();
-
-      if (categories.length === 0) {
-        console.log("⚠️ No categories available to click");
-        return null;
-      }
-      const category = categories[categoryIndex];
-      I.click(category.selector);
-      I.wait(2); // Wait for navigation
-      return category;
-    } catch (error) {
-      throw new Error(
-        `Failed to open category at index ${categoryIndex}: ${error.message}`
-      );
-    }
+    const categories = await this.getAvailableCategoriesFromHeader();
+    const category = categories[categoryIndex];
+    I.click(category.selector);
+    I.wait(2); // Wait for navigation
+    return category;
   }
 
   async isCategoryAvailable(categoryName) {
-    try {
-      const categories = await this.getAvailableCategories();
-      return categories.some((cat) =>
-        cat.name.toLowerCase().includes(categoryName.toLowerCase())
-      );
-    } catch (error) {
-      console.error(`Error checking category availability: ${error.message}`);
-      return false;
-    }
+    const categories = await this.getAvailableCategories();
+    return categories.some((cat) =>
+      cat.name.toLowerCase().includes(categoryName.toLowerCase())
+    );
   }
 
   async openCategoryByName(categoryName) {
-    try {
-      if (!categoryName || categoryName.trim() === "") {
-        throw new Error("Category name cannot be empty");
-      }
-
-      const categories = await this.getAvailableCategories();
-      const targetCategory = categories.find((cat) =>
-        cat.name.toLowerCase().includes(categoryName.toLowerCase())
-      );
-
-      if (!targetCategory) {
-        const availableNames = categories.map((c) => c.name).join(", ");
-        throw new Error(
-          `Category "${categoryName}" not found. Available: ${availableNames}`
-        );
-      }
-
-      return await this.openCategory(targetCategory.index);
-    } catch (error) {
-      throw new Error(
-        `Failed to open category "${categoryName}": ${error.message}`
-      );
-    }
+    const categories = await this.getAvailableCategories();
+    const targetCategory = categories.find((cat) =>
+      cat.name.toLowerCase().includes(categoryName.toLowerCase())
+    );
+    return await this.openCategory(targetCategory.index);
   }
 }
 

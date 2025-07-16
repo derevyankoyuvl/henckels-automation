@@ -19,7 +19,7 @@ Before(async ({ I, HomePage }) => {
 
 Scenario(
   "User registration should require captcha validation",
-  async ({ I, HomePage, RegisterPage, Navigation }) => {
+  async ({ I, RegisterPage, Navigation }) => {
     const userData = await I.generateUserData();
     await Navigation.openSignUpPage();
     await RegisterPage.fillRegistrationForm(userData);
@@ -31,7 +31,7 @@ Scenario(
 
 Scenario(
   "Search functionality should handle both valid and invalid queries",
-  async ({ I, HomePage, Navigation, ProductCatalogPage }) => {
+  async ({ I, Navigation, ProductCatalogPage }) => {
     // Test no results scenario
     await Navigation.openSearchDialog();
     await Navigation.enterSearchQuery(TEST_DATA.noResultsSearch);
@@ -47,7 +47,6 @@ Scenario(
   "Complete order flow with credit card payment",
   async ({
     I,
-    HomePage,
     ProductCatalogPage,
     ProductDetailsPage,
     CartPage,
@@ -75,11 +74,10 @@ Scenario(
   }
 );
 
-Scenario.only(
+Scenario(
   "Complete order flow with PayPal payment",
   async ({
     I,
-    HomePage,
     ProductCatalogPage,
     ProductDetailsPage,
     CartPage,

@@ -4,58 +4,42 @@ const { I } = inject();
  * Product Details Page Object - Handles product detail page functionality
  */
 module.exports = {
-  // Organized locators by logical sections
-  product: {
-    title:
-      '[data-testid="product-title"], h1[data-sentry-element="ProductName"]', // Need to imrove locator
-    price: '[data-testid="product-price"], [data-sentry-element="Price"]', // Need to imrove locator
-    description:
-      '[data-sentry-component="AccordionProductDescription"] [data-sentry-element="AccordionContent"]',
-    specification:
-      '[data-sentry-component="AccordionProductSpecs"] [data-sentry-element="AccordionContent"]',
-    images: '[data-sentry-component="ImageSalesforce"]',
-  },
+  // Product locators
+  productTitle:
+    '[data-testid="product-title"], h1[data-sentry-element="ProductName"]',
+  productPrice: '[data-testid="product-price"], [data-sentry-element="Price"]',
+  productDescription:
+    '[data-sentry-component="AccordionProductDescription"] [data-sentry-element="AccordionContent"]',
+  productSpecification:
+    '[data-sentry-component="AccordionProductSpecs"] [data-sentry-element="AccordionContent"]',
+  productImages: '[data-sentry-component="ImageSalesforce"]',
 
-  actions: {
-    addToCartBtn: 'button[data-sid^="pdp_addtocart"]',
-    quantitySelector: 'button[data-sid^="pdp_quantity_selector"]',
-    quantityInput: 'input[data-testid="quantity-input"]',
-  },
+  // Actions locators
+  actionsAddToCartBtn: 'button[data-sid^="pdp_addtocart"]',
+  actionsQuantitySelector: 'button[data-sid^="pdp_quantity_selector"]',
+  actionsQuantityInput: 'input[data-testid="quantity-input"]',
 
-  sections: {
-    bazaarVoice: '[data-sentry-component="BazaarvoicePDPComponent"]',
-    benefits: '[data-sentry-component="Benefits"]',
-  },
+  // Sections locators
+  sectionsBazaarVoice: '[data-sentry-component="BazaarvoicePDPComponent"]',
+  sectionsBenefits: '[data-sentry-component="Benefits"]',
 
   // Main Actions
   async addToCart(options = {}) {
-    try {
-      // Click add to cart
-      await I.waitForElement(this.actions.addToCartBtn);
-      I.click(this.actions.addToCartBtn);
-    } catch (error) {
-      throw new Error(`Failed to add product to cart: ${error.message}`);
-    }
+    // Click add to cart
+    await I.waitForElement(this.actionsAddToCartBtn);
+    I.click(this.actionsAddToCartBtn);
   },
 
   async verifyPageLoaded() {
-    try {
-      // Verify essential elements are present
-      //await I.waitForElement(this.product.title);
-      await I.waitForElement(
-        this.actions.addToCartBtn
-      );
+    // Verify essential elements are present
+    //await I.waitForElement(this.productTitle);
+    await I.waitForElement(this.actionsAddToCartBtn);
 
-      // Verify product information sections
-      //I.seeElement(this.product.price);
-      //I.seeElement(this.product.images);
+    // Verify product information sections
+    //I.seeElement(this.productPrice);
+    //I.seeElement(this.productImages);
 
-      // Verify key components
-      I.seeElement(this.sections.bazaarVoice);
-    } catch (error) {
-      throw new Error(
-        `Product details page not loaded properly: ${error.message}`
-      );
-    }
+    // Verify key components
+    I.seeElement(this.sectionsBazaarVoice);
   },
 };
