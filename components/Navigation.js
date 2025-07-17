@@ -8,8 +8,10 @@ class Navigation {
     // Header locators
     this.navigation = "header.sticky";
     this.categoryLinks = "header.sticky  li  a";
+    this.mobileCategoryLinks = "nav .items-center span";
+    this.mobileSubCategoryLinks = "nav a span";
     this.skipToMain = "#uw-skip-to-main";
-    this.openNav = '//button[contains(text(), "Open Navigation")]';
+    this.openNav = "header button[data-sentry-source-file='navigation-sheet.tsx']";
     this.searchButton = '//button[@data-sid="menu_quicksearch"]';
     this.searchDialog = '[role="dialog"]';
     this.searchInput = '//input[@data-sid="menu_search_input"]';
@@ -95,11 +97,29 @@ class Navigation {
   }
 
   async openCategory(categoryIndex) {
-    const categories = await this.getAvailableCategoriesFromHeader();
-    const category = categories[categoryIndex];
-    I.click(category.selector);
-    I.wait(2); // Wait for navigation
-    return category;
+    const isMobile = process.env.SCREEN_SIZE === "mobile";
+    if (isMobile) {
+      I.click(this.openNav);
+      await I.waitForElement(this.mobileCategoryLinks);
+      const categories = await I.grabTextFromAll(this.mobileCategoryLinks);
+      const category = categories[categoryIndex];
+      I.click(locate(this.mobileCategoryLinks).at(categoryIndex + 1));
+      //I.click(category);
+      I.wait(2); // Wait for navigation
+      await I.waitForElement(this.mobileSubCategoryLinks);
+      const subCategories = await I.grabTextFromAll(
+        this.mobileSubCategoryLinks
+      );
+      I.click(locate(this.mobileSubCategoryLinks).at(1)); // Click the first subcategory
+      I.wait(2); // Wait for navigation
+      return;
+    } else {
+      const categories = await this.getAvailableCategoriesFromHeader();
+      const category = categories[categoryIndex];
+      I.click(category.selector);
+      I.wait(2); // Wait for navigation
+      return category;
+    }
   }
 
   async isCategoryAvailable(categoryName) {
