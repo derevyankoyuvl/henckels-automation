@@ -1,82 +1,93 @@
+const { I } = inject()
+
 /**
  * Sign In Page Object - Handles user authentication functionality
+ * Uses Locator Builder pattern for better maintainability
  */
+class SignInPage {
+  constructor() {
+    // Form input locators
+    this.email = locate('input[name="email"]').as('Email Input')
+    this.password = locate('input[name="password"]').as('Password Input')
 
-module.exports = {
-  // Organized locators by logical sections
-  email: '//input[@name="email"]',
-  password: '//input[@name="password"]',
-  signIn: '//button[@type="submit"]',
-  resetPassword: '[data-sentry-component="ResetPassword"] button',
-  signUpLink: 'form [data-sentry-element="Link"]',
-  mainContent: '#main-content[role="main"]',
-  form: 'form[data-testid="signin-form"], form:has(input[name="email"])',
-  errorContainer: ".text-destructive",
-  successMessage: '[data-testid="success-message"]',
-  errorMessage: '[data-testid="error-message"]',
-  validationError: ".text-destructive",
+    // Form action locators
+    this.signInBtn = locate('button[type="submit"]').as('Sign In Button')
+    this.resetPasswordBtn = locate('[data-sentry-component="ResetPassword"] button').as('Reset Password Button')
+    this.signUpLink = locate('form [data-sentry-element="Link"]').as('Sign Up Link')
 
-  expectedElements: {
-    title: "SIGN IN",
-    url: "/login",
-  },
+    // Page structure locators
+    this.mainContent = locate('#main-content[role="main"]').as('Main Content')
+  }
 
   // Navigation Methods
-  async navigateToPage(country = "us") {
-      const url = `/${country}/login`;
-      I.amOnPage(url);
-      await this.verifyPageLoaded();
-  },
+  navigateToPage(country = "us") {
+    const url = `/${country}/login`
+    I.amOnPage(url)
+    this.verifyPageLoaded()
+  }
 
-  // Form Input Methods
-  async fillSignInCredentials(userData) {
-      await this.validateUserData(userData);
-      await I.waitForElement(this.email);
-      await I.waitForElement(this.password);
-      I.clearField(this.email);
-      I.fillField(this.email, userData.email);
-      I.clearField(this.password);
-      I.fillField(this.password, userData.password);
-  },
+  // Form Input Methods - removed async/await and clearField
+  fillSignInCredentials(userData) {
+    I.waitForElement(this.email)
+    I.fillField(this.email, userData.email)  
+    I.waitForElement(this.password)
+    I.fillField(this.password, userData.password)
+  }
 
-  async fillEmail(email) {
-      await I.waitForElement(this.email);
-      I.clearField(this.email);
-      I.fillField(this.email, email);
-  },
+  fillEmail(email) {
+    I.waitForElement(this.email)
+    I.fillField(this.email, email)
+  }
 
-  async fillPassword(password) {
-      await I.waitForElement(this.password);
-      I.clearField(this.password);
-      I.fillField(this.password, password);
-  },
+  fillPassword(password) {
+    I.waitForElement(this.password)
+    I.fillField(this.password, password)
+  }
 
   // Action Methods
-  async submitSignIn() {
-      await I.waitForElement(this.signIn);
-      I.click(this.signIn);
-  },
-
-  async performSignIn(userData) {
-      await this.fillSignInCredentials(userData);
-      await this.submitSignIn();
-  },
+  submitSignIn() {
+    I.waitForElement(this.signInBtn)
+    I.click(this.signInBtn)
+  }
 
   // Navigation to Other Pages
-  async goToSignUp() {
-      await I.waitForElement(this.signUpLink);
-      I.click(this.signUpLink);
-  },
+  goToSignUp() {
+    I.waitForElement(this.signUpLink)
+    I.click(this.signUpLink)
+  }
 
-  async goToResetPassword() {
-      await I.waitForElement(this.resetPassword);
-      I.click(this.resetPassword);
-  },
+  goToResetPassword() {
+    I.waitForElement(this.resetPasswordBtn)
+    I.click(this.resetPasswordBtn)
+  }
 
   // Validation and Verification Methods
-  async verifyPageLoaded() {
-      I.seeInTitle(this.expectedElements.title);
-      await I.waitForElement(this.mainContent);
-      I.seeElement(this.form);
-  },
-};
+  verifyPageLoaded() {
+    // Local expected values instead of global constants
+    const expectedTitle = "SIGN IN"
+    const expectedUrlPath = "/login"
+
+    I.seeInTitle(expectedTitle)
+    I.waitForElement(this.mainContent)
+    I.seeInCurrentUrl(expectedUrlPath)
+  }
+
+  verifyFormElements() {
+    // Verify all required form elements are present
+    I.seeElement(this.email)
+    I.seeElement(this.password)
+    I.seeElement(this.signInBtn)
+
+    // Verify form elements are enabled
+    I.dontSeeElement(this.email.withAttr('disabled'))
+    I.dontSeeElement(this.password.withAttr('disabled'))
+    I.dontSeeElement(this.signInBtn.withAttr('disabled'))
+  }
+
+  verifyNavigationLinks() {
+    I.seeElement(this.signUpLink)
+    I.seeElement(this.resetPasswordBtn)
+  }
+}
+
+module.exports = new SignInPage()

@@ -1,129 +1,125 @@
-const { orderSummary } = require("./CheckoutPage");
-
-const { I } = inject();
-const { expect } = require("@playwright/test");
+const { I, messages } = inject()
 
 /**
  * Order Confirmation Page Object - Handles order confirmation and verification
+ * Uses Locator Builder pattern for better maintainability
  */
-module.exports = {
-  // Thank You locators
-  thankYouSection: "#orderconfirmation-content",
-  thankYouTitle: "#orderconfirmation-content h1",
-  thankYouMessage: "#orderconfirmation-content .bg-card h2",
+class OrderConfirmationPage {
+  constructor() {
+    // Thank You section locators
+    this.thankYouSection = locate("#orderconfirmation-content").as("Thank You Section")
+    this.thankYouTitle = locate("h1").inside(this.thankYouSection).as("Thank You Title")
+    this.thankYouMessage = locate(".bg-card h2").inside(this.thankYouSection).as("Thank You Message")
 
-  // Order Details locators
-  orderDetailsSection: '[data-sentry-component="OrderDetails"]',
-  orderDetailsTitle: '[data-sentry-component="OrderDetails"] h3',
-  orderDetailsNumber: '[data-sentry-component="OrderDetails"]',
-  orderDetailsDate: '[data-sentry-component="OrderDetails"]',
-  orderDetailsStatus: '[data-sentry-component="OrderShippingStatus"]',
+    // Order Details section locators
+    this.orderDetailsSection = locate('[data-sentry-component="OrderDetails"]').as("Order Details Section")
+    this.orderDetailsTitle = locate("h3").inside(this.orderDetailsSection).as("Order Details Title")
+    this.orderDetailsNumber = locate('[data-sentry-component="OrderDetails"]').as("Order Details Number")
+    this.orderDetailsDate = locate('[data-sentry-component="OrderDetails"]').as("Order Details Date")
+    this.orderDetailsStatus = locate('[data-sentry-component="OrderShippingStatus"]').as("Order Details Status")
 
-  // Order Summary locators
-  orderSummaryContainer: '[data-testid="order-products"], .order-products',
-  orderSummaryProductItem: '[data-sentry-component="OrderItems"]',
-  orderSummaryProductName: '[data-sentry-component="OrderItems"]',
-  orderSummaryProductQuantity: '[data-sentry-component="OrderItems"]',
-  orderSummaryProductImage: '[data-sentry-component="OrderItems"]',
-  orderSummaryProductPrice: '[data-sentry-component="OrderPriceInfo"]',
-  orderSummarySubtotal: '[data-sentry-component="OrderPriceInfo"]',
-  orderSummaryTax: '[data-sentry-component="OrderPriceInfo"]',
-  orderSummaryShipping: '[data-sentry-component="OrderPriceInfo"]',
-  orderSummaryDiscount: '[data-sentry-component="OrderPriceInfo"]',
-  orderSummaryTotal: '[data-sentry-component="OrderPriceInfo"]',
-  orderSummaryPromoCode: '[data-sentry-component="OrderPriceInfo"]',
+    // Order Summary section locators
+    this.orderSummaryContainer = locate('[data-testid="order-products"], .order-products').as("Order Summary Container")
+    this.orderSummaryProductItem = locate('[data-sentry-component="OrderItems"]').as("Order Summary Product Item")
+    this.orderSummaryProductName = locate('[data-sentry-component="OrderItems"]').as("Order Summary Product Name")
+    this.orderSummaryProductQuantity = locate('[data-sentry-component="OrderItems"]').as("Order Summary Product Quantity")
+    this.orderSummaryProductImage = locate('[data-sentry-component="OrderItems"]').as("Order Summary Product Image")
+    
+    // Price info locators
+    this.priceInfoSection = locate('[data-sentry-component="OrderPriceInfo"]').as("Price Info Section")
+    this.orderSummaryProductPrice = locate('[data-sentry-component="OrderPriceInfo"]').as("Order Summary Product Price")
+    this.orderSummarySubtotal = locate('[data-sentry-component="OrderPriceInfo"]').as("Order Summary Subtotal")
+    this.orderSummaryTax = locate('[data-sentry-component="OrderPriceInfo"]').as("Order Summary Tax")
+    this.orderSummaryShipping = locate('[data-sentry-component="OrderPriceInfo"]').as("Order Summary Shipping")
+    this.orderSummaryDiscount = locate('[data-sentry-component="OrderPriceInfo"]').as("Order Summary Discount")
+    this.orderSummaryTotal = locate('[data-sentry-component="OrderPriceInfo"]').as("Order Summary Total")
+    this.orderSummaryPromoCode = locate('[data-sentry-component="OrderPriceInfo"]').as("Order Summary Promo Code")
 
-  // Addresses locators
-  addressesShippingSection: '[data-sentry-component="OrderAddressInfo"]',
-  addressesBillingSection: '[data-sentry-component="OrderAddressInfo"]',
-  addressesCustomerName: '[data-sentry-component="OrderAddressInfo"]',
-  addressesStreetAddress: '[data-sentry-component="OrderAddressInfo"]',
-  addressesCityStateZip: '[data-sentry-component="OrderAddressInfo"]',
-  addressesCountry: '[data-sentry-component="OrderAddressInfo"]',
-  addressesPhoneNumber: '[data-sentry-component="OrderAddressInfo"]',
+    // Address section locators
+    this.addressInfoSection = locate('[data-sentry-component="OrderAddressInfo"]').as("Address Info Section")
+    this.addressesShippingSection = locate('[data-sentry-component="OrderAddressInfo"]').as("Shipping Address Section")
+    this.addressesBillingSection = locate('[data-sentry-component="OrderAddressInfo"]').as("Billing Address Section")
+    this.addressesCustomerName = locate('[data-sentry-component="OrderAddressInfo"]').as("Customer Name")
+    this.addressesStreetAddress = locate('[data-sentry-component="OrderAddressInfo"]').as("Street Address")
+    this.addressesCityStateZip = locate('[data-sentry-component="OrderAddressInfo"]').as("City State Zip")
+    this.addressesCountry = locate('[data-sentry-component="OrderAddressInfo"]').as("Country")
+    this.addressesPhoneNumber = locate('[data-sentry-component="OrderAddressInfo"]').as("Phone Number")
 
-  // Payment locators
-  paymentSection: '[data-sentry-component="OrderPaymentInfo"]',
-  paymentMethod: '[data-sentry-component="OrderPaymentInfo"]',
-  paymentAmount: '[data-sentry-component="OrderPaymentInfo"]',
+    // Payment section locators
+    this.paymentSection = locate('[data-sentry-component="OrderPaymentInfo"]').as("Payment Section")
+    this.paymentMethod = locate('[data-sentry-component="OrderPaymentInfo"]').as("Payment Method")
+    this.paymentAmount = locate('[data-sentry-component="OrderPaymentInfo"]').as("Payment Amount")
 
-  // Actions locators
-  actionsContinueShoppingButton: '[data-sid="checkout_continueshopping"]',
+    // Actions locators
+    this.actionsContinueShoppingButton = locate('[data-sid="checkout_continueshopping"]').as("Continue Shopping Button")
 
-  async verifyPageLoaded() {
+    // Dynamic locators for specific products
+    this.productByName = (productName) =>
+      locate('[data-sentry-component="OrderItems"]')
+        .withChild(locate("text").withText(productName))
+        .as(`${productName} Product Item`)
+  }
+
+  verifyPageLoaded() {
     // Wait for essential sections to load
-    await I.waitForElement(this.thankYouSection);
-    await I.waitForElement(this.orderDetailsSection);
+    I.waitForElement(this.thankYouSection)
+    I.waitForElement(this.orderDetailsSection)
 
     // Verify key components are present
-    I.seeElement(this.thankYouTitle);
-  },
+    I.seeElement(this.thankYouTitle)
+  }
 
   // Thank You Message Verification
-  async verifyThankYouMessage(customerName) {
+  verifyThankYouMessage(customerName) {
     // Wait for thank you message
-    await I.waitForElement(this.thankYouTitle);
+    I.waitForElement(this.thankYouTitle)
 
     // Check for thank you message with customer name
-    I.see(`Thank you, ${customerName}`, this.thankYouTitle);
+    I.see(`${messages.thankYouText}, ${customerName}`, this.thankYouTitle)
 
     // Verify confirmation text
-    I.see(
-      "We have received your order and will send an order confirmation",
-      this.thankYouMessage
-    );
-    I.see(
-      "If you don't see it, be sure to check your SPAM folder",
-      this.thankYouMessage
-    );
-  },
+    I.see(messages.confirmationText, this.thankYouMessage)
+    I.see(messages.spamWarning, this.thankYouMessage)
+  }
 
-  async verifyOrderCompletion(customerName) {
-    await this.verifyPageLoaded();
-    await this.verifyThankYouMessage(customerName);
-  },
-
-  // Order Details Verification
-  async verifyOrderDetails(expectedOrderData = {}) {
-    I.seeElement(this.orderDetailsSection);
-      I.see(expectedOrderData.orderNumber, this.orderDetailsNumber);
-      I.see(expectedOrderData.orderDate, this.orderDetailsDate);
-      I.see(expectedOrderData.status, this.orderDetailsStatus);
-  },
+  verifyOrderCompletion(customerName) {
+    this.verifyPageLoaded()
+    this.verifyThankYouMessage(customerName)
+  }
 
   async getOrderNumber() {
-    await I.waitForElement(this.orderDetailsNumber);
-    const orderNumber = await I.grabTextFrom(this.orderDetailsNumber);
-    return orderNumber.trim();
-  },
+    I.waitForElement(this.orderDetailsNumber)
+    const orderNumber = await I.grabTextFrom(this.orderDetailsNumber)
+    return orderNumber.trim()
+  }
 
   async getOrderDate() {
-    await I.waitForElement(this.orderDetailsDate);
-    const orderDate = await I.grabTextFrom(this.orderDetailsDate);
-    return orderDate.trim();
-  },
+    I.waitForElement(this.orderDetailsDate)
+    const orderDate = await I.grabTextFrom(this.orderDetailsDate)
+    return orderDate.trim()
+  }
 
-  // Pricing Verification
-  async verifyPricing(expectedPricing = {}) {
-    await I.waitForElement(this.orderSummaryProductPrice);
-      I.see(expectedPricing.subtotal, this.orderSummarySubtotal);
-      I.see(expectedPricing.tax, this.orderSummaryTax);
-      I.see(expectedPricing.shipping, this.orderSummaryShipping);
-      I.see(expectedPricing.discount, this.orderSummaryDiscount);
-      I.see(expectedPricing.total, this.orderSummaryTotal);
-  },
+  // Product verification methods
+  verifyProductInOrder(productName) {
+    I.seeElement(this.productByName(productName))
+  }
 
-  async verifyPricingCalculation() {
-    const subtotal = await this.extractPrice(this.orderSummarySubtotal);
-    const tax = await this.extractPrice(this.orderSummaryTax);
-    const shipping = await this.extractPrice(this.orderSummaryShipping);
-    const total = await this.extractPrice(this.orderSummaryTotal);
+  // Payment verification methods
+  verifyPaymentMethod(expectedMethod) {
+    I.waitForElement(this.paymentSection)
+    I.see(expectedMethod, this.paymentMethod)
+  }
 
-    let discount = 0;
-    discount = await this.extractPrice(this.orderSummaryDiscount);
+  verifyPaymentAmount(expectedAmount) {
+    I.waitForElement(this.paymentSection)
+    I.see(expectedAmount, this.paymentAmount)
+  }
 
-    const calculatedTotal = subtotal + tax + shipping - discount;
-    const tolerance = 0.01; // Allow for rounding differences
-    expect(total).toBeCloseTo(calculatedTotal, 2);
-  },
-};
+  // Navigation methods
+  continueShopping() {
+    I.waitForElement(this.actionsContinueShoppingButton)
+    I.click(this.actionsContinueShoppingButton)
+  }
+}
+
+module.exports = new OrderConfirmationPage()

@@ -1,153 +1,188 @@
-const { I } = inject();
+const { I } = inject()
 
 /**
  * Sign Up Page Object - Handles user registration functionality
+ * Uses Locator Builder pattern for better maintainability
  */
+class SignUpPage {
+  constructor() {
+    // Form input locators
+    this.email = locate('input[name="email"]').as("Email Input")
+    this.firstName = locate('input[name="firstName"]').as("First Name Input")
+    this.lastName = locate('input[name="lastName"]').as("Last Name Input")
+    this.password = locate('input[name="password"]').as("Password Input")
 
-module.exports = {
-  // Locators for the registration page elements
-  email: '//input[@name="email"]',
-  firstName: '//input[@name="firstName"]',
-  lastName: '//input[@name="lastName"]',
-  password: '//input[@name="password"]',
-  signUp: '//button[@type="submit"]',
-  acceptTerms: "#registration-accept",
-  privacyPolicy: '//a[contains(text(), "Privacy Policy")]',
-  termsOfService: '//a[contains(text(), "Terms of Service")]',
-  signIn: '//a[contains(text(), "Sign in")]',
-  mainContent: "#main-content",
-  header: "header.sticky",
-  footer: "#reduced-footer",
-  form: 'form[data-testid="registration-form"], form:has(input[name="email"])',
-  loadingSpinner: '[data-testid="loading-spinner"]',
-  alertMsg: '[data-sentry-element="AlertDescription"]',
-  successMessage: '[data-testid="success-message"]',
-  errorMessage: ".error-message, .text-destructive",
-  validationError: ".field-error, .validation-error",
-  captchaContainer: '[title="reCAPTCHA"]',
-  captchaCheckbox: "#recaptcha-anchor",
-  captchaFrame: 'iframe[title="reCAPTCHA"]',
+    // Form action locators
+    this.signUpBtn = locate('button[type="submit"]').as("Sign Up Button")
+    this.acceptTermsCheckbox = locate("#registration-accept").as(
+      "Accept Terms Checkbox"
+    )
+    this.alertMsg = locate('[data-sentry-element="AlertDescription"]').as(
+      "Alert Message"
+    )
+    
+    // Navigation links
+    this.privacyPolicyLink = locate("a")
+      .withText("Privacy Policy")
+      .as("Privacy Policy Link")
+    this.termsOfServiceLink = locate("a")
+      .withText("Terms of Service")
+      .as("Terms of Service Link")
+    this.signInLink = locate("a").withText("Sign in").as("Sign In Link")
 
-  expectedElements: {
-    title: "HENCKELS US",
-    url: "/register",
-  },
+    // Page structure locators
+    this.mainContent = locate("#main-content").as("Main Content")
 
-  validation: {
-    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    password: {
-      minLength: 8,
-      requireUppercase: true,
-      requireLowercase: true,
-      requireNumbers: true,
-    },
-    name: {
-      minLength: 2,
-      maxLength: 50,
-    },
-  },
+    // CAPTCHA locators
+    this.captchaContainer = locate('[title="reCAPTCHA"]').as(
+      "CAPTCHA Container"
+    )
+    this.captchaCheckbox = locate("#recaptcha-anchor").as("CAPTCHA Checkbox")
+    this.captchaFrame = locate('iframe[title="reCAPTCHA"]').as("CAPTCHA Frame")
+  }
 
   // Navigation Methods
-  async navigateToPage(country = "us") {
-    const url = `/${country}/register`;
-    I.amOnPage(url);
-    await this.verifyPageLoaded();
-  },
+  navigateToPage(country = "us") {
+    const url = `/${country}/register`
+    I.amOnPage(url)
+    this.verifyPageLoaded()
+  }
 
-  // Form Input Methods
-  async fillRegistrationForm(userData) {
-    // Clear and fill all fields
-    await this.fillEmail(userData.email);
-    await this.fillFirstName(userData.firstName);
-    await this.fillLastName(userData.lastName);
-    await this.fillPassword(userData.password);
-  },
+  // Form Input Methods - removed async/await and clearField
+  fillRegistrationForm(userData) {
+    // Fill all fields
+    this.fillEmail(userData.email)
+    this.fillFirstName(userData.firstName)
+    this.fillLastName(userData.lastName)
+    this.fillPassword(userData.password)
+  }
 
-  async fillEmail(email) {
-    await I.waitForElement(this.email);
-    I.clearField(this.email);
-    I.fillField(this.email, email);
-  },
+  fillEmail(email) {
+    I.waitForElement(this.email)
+    I.fillField(this.email, email)
+  }
 
-  async fillFirstName(firstName) {
-    await I.waitForElement(this.firstName);
-    I.clearField(this.firstName);
-    I.fillField(this.firstName, firstName);
-  },
+  fillFirstName(firstName) {
+    I.waitForElement(this.firstName)
+    I.fillField(this.firstName, firstName)
+  }
 
-  async fillLastName(lastName) {
-    await I.waitForElement(this.lastName);
-    I.clearField(this.lastName);
-    I.fillField(this.lastName, lastName);
-  },
+  fillLastName(lastName) {
+    I.waitForElement(this.lastName)
+    I.fillField(this.lastName, lastName)
+  }
 
-  async fillPassword(password) {
-    await I.waitForElement(this.password);
-    I.clearField(this.password);
-    I.fillField(this.password, password);
-  },
+  fillPassword(password) {
+    I.waitForElement(this.password)
+    I.fillField(this.password, password)
+  }
 
   // Action Methods
-  async acceptTermsAndConditions() {
-    await I.waitForElement(this.acceptTerms);
-    I.click(this.acceptTerms);
-  },
+  acceptTermsAndConditions() {
+    I.waitForElement(this.acceptTermsCheckbox)
+    I.checkOption(this.acceptTermsCheckbox)
+  }
 
-  async submitForm() {
-    await I.waitForElement(this.signUp);
-    I.click(this.signUp);
-  },
+  submitForm() {
+    I.waitForElement(this.signUpBtn)
+    I.click(this.signUpBtn)
+  }
 
-  async acceptCaptcha() {
-    await I.waitForElement(this.captchaFrame, this.config.captchaTimeout);
+  acceptCaptcha() {
+    // Local timeout variable instead of global config
+    const captchaTimeout = 10
+
+    I.waitForElement(this.captchaFrame, captchaTimeout)
 
     within({ frame: this.captchaContainer }, () => {
-      I.click(this.captchaCheckbox);
-    });
+      I.click(this.captchaCheckbox)
+    })
 
     // Wait for CAPTCHA to be processed
-    I.wait(2);
-  },
+    I.wait(2)
+  }
 
-  // Navigation to Other Pages
-  async goToSignIn() {
-    await I.waitForElement(this.signIn);
-    I.click(this.signIn);
-  },
+  // Complete registration flow
+  completeRegistration(userData) {
+    this.fillRegistrationForm(userData)
+    this.acceptTermsAndConditions()
 
-  async openPrivacyPolicy() {
-    await I.waitForElement(this.privacyPolicy);
-    I.click(this.privacyPolicy);
-  },
-
-  async openTermsOfService() {
-    await I.waitForElement(this.termsOfService);
-    I.click(this.termsOfService);
-  },
-
-  // Validation and Verification Methods
-  async verifyPageLoaded() {
-    I.seeInTitle(this.expectedElements.title);
-    await I.waitForElement(this.mainContent);
-    I.seeElement(this.form);
-  },
-
-  async validateFormElements() {
-    // Check all form fields are present and enabled
-    const fields = [this.email, this.firstName, this.lastName, this.password];
-
-    for (const fieldSelector of fields) {
-      I.seeElement(fieldSelector);
-      I.seeElement(`${fieldSelector}:enabled`);
+    // Handle CAPTCHA if present
+    try {
+      this.acceptCaptcha()
+    } catch (error) {
+      console.log("CAPTCHA not present or already completed")
     }
 
+    this.submitForm()
+  }
+
+  // Navigation to Other Pages
+  goToSignIn() {
+    I.waitForElement(this.signInLink)
+    I.click(this.signInLink)
+  }
+
+  openPrivacyPolicy() {
+    I.waitForElement(this.privacyPolicyLink)
+    I.click(this.privacyPolicyLink)
+  }
+
+  openTermsOfService() {
+    I.waitForElement(this.termsOfServiceLink)
+    I.click(this.termsOfServiceLink)
+  }
+
+  // Validation and Verification Methods
+  verifyPageLoaded() {
+    // Local expected values instead of global constants
+    const expectedTitle = "HENCKELS US"
+    const expectedUrlPath = "/register"
+
+    I.seeInTitle(expectedTitle)
+    I.waitForElement(this.mainContent)
+    I.seeInCurrentUrl(expectedUrlPath)
+  }
+
+  validateFormElements() {
+    // Check all form fields are present and enabled
+    const formFields = [
+      this.email,
+      this.firstName,
+      this.lastName,
+      this.password,
+    ]
+
+    formFields.forEach((field) => {
+      I.seeElement(field)
+      // Check field is enabled by verifying it doesn't have disabled attribute
+      I.dontSeeElement(field.withAttr("disabled"))
+    })
+
     // Check buttons are present
-    I.seeElement(this.signUp);
-    I.seeElement(this.acceptTerms);
-  },
+    I.seeElement(this.signUpBtn)
+    I.seeElement(this.acceptTermsCheckbox)
+  }
+
+  // CAPTCHA-specific methods
+  verifyCaptchaPresent() {
+    I.seeElement(this.captchaContainer)
+    I.seeElement(this.captchaFrame)
+  }
+
+  verifyCaptchaCompleted() {
+    // Check if CAPTCHA checkbox is checked
+    const checkedCaptcha = locate(this.captchaCheckbox).withAttr(
+      "aria-checked",
+      "true"
+    )
+    I.seeElement(checkedCaptcha)
+  }
 
   async verifyAlertMsg(expectedMessage) {
-      await I.waitForElement(this.alertMsg);
-      I.see(expectedMessage, this.alertMsg);
-  },
-};
+    await I.waitForElement(this.alertMsg)
+    I.see(expectedMessage, this.alertMsg)
+  }
+}
+
+module.exports = new SignUpPage()
