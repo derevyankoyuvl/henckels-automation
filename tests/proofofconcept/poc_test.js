@@ -1,106 +1,127 @@
-const cardData = require("../../data/creditCards.json");
+const {
+  I,
+  HomePage,
+  ProductCatalogPage,
+  ProductDetailsPage,
+  CartPage,
+  CheckoutPage,
+  ConfirmationPage,
+  RegisterPage,
+  Navigation,
+  cardData,
+  messages,
+} = inject()
 
-Feature("Henckels US - E-commerce Core Functionality");
-
-// Test data constants
-const TEST_DATA = {
-  noResultsSearch: "test",
-  searchParam: "thermometer",
-  alertValidationMsg: "Error: Please confirm you are not a robot.",
-  region: "us",
-  productIndex: 0,
-  categoryIndex: 0,
-};
+Feature("Henckels US - E-commerce Core Functionality")
 
 Before(async ({ I, HomePage }) => {
   // Common setup that applies to all scenarios
-  await HomePage.visit(TEST_DATA.region);
-});
+  await HomePage.visit(process.env.COUNTRY)
+})
 
-Scenario(
-  "User registration should require captcha validation",
-  async ({ I, RegisterPage, Navigation }) => {
-    const userData = await I.generateUserData();
-    await Navigation.openSignUpPage();
-    await RegisterPage.fillRegistrationForm(userData);
-    await RegisterPage.acceptTermsAndConditions();
-    await RegisterPage.submitForm();
-    await RegisterPage.verifyAlertMsg(TEST_DATA.alertValidationMsg);
-  }
-);
+Scenario("User registration should require captcha validation", async () => {
+  const userData = await I.generateUserData()
+  Navigation.openSignUpPage()
+  RegisterPage.fillRegistrationForm(userData)
+  RegisterPage.acceptTermsAndConditions()
+  RegisterPage.submitForm()
+  RegisterPage.verifyAlertMsg(messages.captchaValidation)
+})
 
 Scenario(
   "Search functionality should handle both valid and invalid queries",
-  async ({ I, Navigation, ProductCatalogPage }) => {
+  async () => {
     // Test no results scenario
-    await Navigation.openSearchDialog();
-    await Navigation.enterSearchQuery(TEST_DATA.noResultsSearch);
-    await ProductCatalogPage.verifySearchResults(TEST_DATA.noResultsSearch);
+    Navigation.openSearchDialog()
+    Navigation.enterSearchQuery("test")
+    await ProductCatalogPage.verifySearchResults("test")
     // Test valid search scenario
-    await Navigation.openSearchDialog();
-    await Navigation.enterSearchQuery(TEST_DATA.searchParam);
-    await ProductCatalogPage.verifySearchResults(TEST_DATA.searchParam);
+    Navigation.openSearchDialog()
+    Navigation.enterSearchQuery("thermometer")
+    await ProductCatalogPage.verifySearchResults("thermometer")
   }
-);
+)
 
-Scenario(
-  "Complete order flow with credit card payment",
-  async ({
-    I,
-    ProductCatalogPage,
-    ProductDetailsPage,
-    CartPage,
-    CheckoutPage,
-    ConfirmationPage,
-    Navigation,
-  }) => {
-    const shippingData = await I.generateShippingData();
-    await Navigation.openCategory(TEST_DATA.categoryIndex);
-    await ProductCatalogPage.verifyPageLoaded();
-    await ProductCatalogPage.openProductDetailsPage(TEST_DATA.productIndex);
-    await ProductDetailsPage.verifyPageLoaded();
-    await ProductDetailsPage.addToCart();
-    await CartPage.verifyCartDialogLoaded();
-    await CartPage.proceedToCheckout();
-    await CheckoutPage.verifyPageLoaded();
-    await CheckoutPage.fillGuestEmail(shippingData);
-    await CheckoutPage.fillShippingInformation(shippingData);
-    await CheckoutPage.continueToNextStep();
-    await CheckoutPage.fillCreditCardInformation("visa", cardData);
-    await CheckoutPage.submitOrder();
-    await ConfirmationPage.verifyOrderCompletion(
-      shippingData.firstName + " " + shippingData.lastName
-    );
-  }
-);
+Scenario("Complete order flow with credit card payment", async () => {
+  const shippingData = await I.generateShippingData()
+  await Navigation.openCategory(0)
+  ProductCatalogPage.verifyPageLoaded()
+  await ProductCatalogPage.openProductDetailsPage(0)
+  ProductDetailsPage.verifyPageLoaded()
+  ProductDetailsPage.addToCart()
+  CartPage.verifyCartDialogLoaded()
+  await CartPage.proceedToCheckout()
+  CheckoutPage.verifyPageLoaded()
+  CheckoutPage.fillGuestEmail(shippingData)
+  CheckoutPage.fillShippingInformation(shippingData)
+  CheckoutPage.continueToNextStep()
+  await CheckoutPage.keepEnteredAddress()
+  CheckoutPage.fillCreditCardInformation("visa", cardData)
+  CheckoutPage.submitOrder()
+  ConfirmationPage.verifyOrderCompletion(
+    shippingData.firstName + " " + shippingData.lastName
+  )
+})
 
-Scenario(
-  "Complete order flow with PayPal payment",
-  async ({
-    I,
-    ProductCatalogPage,
-    ProductDetailsPage,
-    CartPage,
-    CheckoutPage,
-    ConfirmationPage,
-    Navigation,
-  }) => {
-    const shippingData = await I.generateShippingData();
-    await Navigation.openCategory(TEST_DATA.categoryIndex);
-    await ProductCatalogPage.verifyPageLoaded();
-    await ProductCatalogPage.openProductDetailsPage(TEST_DATA.productIndex);
-    await ProductDetailsPage.verifyPageLoaded();
-    await ProductDetailsPage.addToCart();
-    await CartPage.verifyCartDialogLoaded();
-    await CartPage.proceedToCheckout();
-    await CheckoutPage.verifyPageLoaded();
-    await CheckoutPage.fillGuestEmail(shippingData);
-    await CheckoutPage.fillShippingInformation(shippingData);
-    await CheckoutPage.continueToNextStep();
-    await CheckoutPage.selectPaymentMethod("paypal");
-    await CheckoutPage.submitOrderWithPayPal();
-    await ConfirmationPage.verifyOrderCompletion(
-      shippingData.firstName + " " + shippingData.lastName
-    );
-  }
-);
+Scenario("Complete order flow with PayPal payment", async () => {
+  const shippingData = await I.generateShippingData()
+  await Navigation.openCategory(0)
+  ProductCatalogPage.verifyPageLoaded()
+  await ProductCatalogPage.openProductDetailsPage(0)
+  ProductDetailsPage.verifyPageLoaded()
+  ProductDetailsPage.addToCart()
+  CartPage.verifyCartDialogLoaded()
+  await CartPage.proceedToCheckout()
+  CheckoutPage.verifyPageLoaded()
+  CheckoutPage.fillGuestEmail(shippingData)
+  CheckoutPage.fillShippingInformation(shippingData)
+  CheckoutPage.continueToNextStep()
+  await CheckoutPage.keepEnteredAddress()
+  CheckoutPage.selectPaymentMethod("paypal")
+  CheckoutPage.submitOrderWithPayPal()
+  ConfirmationPage.verifyOrderCompletion(
+    shippingData.firstName + " " + shippingData.lastName
+  )
+})
+
+Scenario("Complete order flow with Klarna payment", async () => {
+  const shippingData = await I.generateShippingData()
+  await Navigation.openCategory(0)
+  ProductCatalogPage.verifyPageLoaded()
+  await ProductCatalogPage.openProductDetailsPage(0)
+  ProductDetailsPage.verifyPageLoaded()
+  ProductDetailsPage.addToCart()
+  CartPage.verifyCartDialogLoaded()
+  await CartPage.proceedToCheckout()
+  CheckoutPage.verifyPageLoaded()
+  CheckoutPage.fillGuestEmail(shippingData)
+  CheckoutPage.fillShippingInformation(shippingData)
+  CheckoutPage.continueToNextStep()
+  await CheckoutPage.keepEnteredAddress()
+  CheckoutPage.selectPaymentMethod("klarna")
+  await CheckoutPage.submitOrderWithKlarna()
+  ConfirmationPage.verifyOrderCompletion(
+    shippingData.firstName + " " + shippingData.lastName
+  )
+})
+
+Scenario.skip("Complete order flow with GooglePay payment", async () => {
+  const shippingData = await I.generateShippingData()
+  await Navigation.openCategory(0)
+  ProductCatalogPage.verifyPageLoaded()
+  await ProductCatalogPage.openProductDetailsPage(0)
+  ProductDetailsPage.verifyPageLoaded()
+  ProductDetailsPage.addToCart()
+  CartPage.verifyCartDialogLoaded()
+  await CartPage.proceedToCheckout()
+  CheckoutPage.verifyPageLoaded()
+  CheckoutPage.fillGuestEmail(shippingData)
+  CheckoutPage.fillShippingInformation(shippingData)
+  CheckoutPage.continueToNextStep()
+  await CheckoutPage.keepEnteredAddress()
+  CheckoutPage.selectPaymentMethod("googlepay")
+  CheckoutPage.submitOrderWithGooglePay()
+  ConfirmationPage.verifyOrderCompletion(
+    shippingData.firstName + " " + shippingData.lastName
+  )
+})

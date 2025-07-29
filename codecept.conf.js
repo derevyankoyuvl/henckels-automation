@@ -1,6 +1,5 @@
 require("dotenv").config();
 const { setHeadlessWhen, setCommonPlugins } = require("@codeceptjs/configure");
-const SignInPage = require("./pages/SignInPage");
 
 // export HEADLESS=true && npx codeceptjs run
 //setHeadlessWhen(process.env.HEADLESS);
@@ -39,15 +38,17 @@ exports.config = {
   },
   include: {
     I: "./steps_file.js",
-    HomePage: "./pages/HomePage.js",
-    ProductCatalogPage: "./pages/ProductCatalogPage.js",
-    ProductDetailsPage: "./pages/ProductDetailsPage.js",
-    CartPage: "./pages/CartPage.js",
-    CheckoutPage: "./pages/CheckoutPage.js",
-    RegisterPage: "./pages/RegisterPage.js",
-    ConfirmationPage: "./pages/ConfirmationPage.js",
-    SignInPage: "./pages/SignInPage.js",
-    Navigation: "./components/Navigation.js",
+    HomePage: "./pages/homePage.js",
+    ProductCatalogPage: "./pages/productCatalogPage.js",
+    ProductDetailsPage: "./pages/productDetailsPage.js",
+    CartPage: "./pages/cartPage.js",
+    CheckoutPage: "./pages/checkoutPage.js",
+    RegisterPage: "./pages/registerPage.js",
+    ConfirmationPage: "./pages/confirmationPage.js",
+    SignInPage: "./pages/signInPage.js",
+    Navigation: "./components/navigation.js",
+    cardData: "./data/creditCards.json",
+    messages: "./data/messages.js",
   },
   // Plugins
   plugins: {
@@ -103,7 +104,7 @@ exports.config = {
       ],
     },
   },
-};
+}
 
 function getWindowSize() {
   const size = process.env.SCREEN_SIZE || "desktop";

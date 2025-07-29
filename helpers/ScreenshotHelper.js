@@ -1,14 +1,14 @@
 class ScreenshotHelper extends Helper {
   async takeScreenshotOnFailure() {
-    const helper = this.helpers["Playwright"];
-    await helper.saveScreenshot(`failure_${Date.now()}.png`);
+    const helper = this.helpers["Playwright"]
+    await helper.saveScreenshot(`failure_${Date.now()}.png`)
   }
 
   async compareScreenshot(name) {
-    const helper = this.helpers["Playwright"];
+    const helper = this.helpers["Playwright"]
     // Implement visual comparison logic
-    await helper.saveScreenshot(`${name}_${Date.now()}.png`);
+    await helper.saveScreenshot(`${name}_${Date.now()}.png`)
   }
 }
 
-module.exports = ScreenshotHelper;
+module.exports = ScreenshotHelper
