@@ -451,7 +451,7 @@ class CheckoutPage {
     I.seeElement(this.shippingSection)
   }
 
-  submitOrderWithKlarna(credentials = {}) {
+  async submitOrderWithKlarna(credentials = {}) {
     // Use credentials from environment variables, fallback to defaults if not set
     const defaultCredentials = {
       phone: process.env.KLARNA_PHONE_US,
@@ -464,10 +464,10 @@ class CheckoutPage {
     I.click(this.klarnaSubmitBtn)
 
     // Handle Klarna login
-    this._handleKlarnaPayment(klarnaCredentials)
+    await this._handleKlarnaPayment(klarnaCredentials)
   }
 
-  _handleKlarnaPayment(credentials) {
+  async _handleKlarnaPayment(credentials) {
     // Enter phone number
     I.waitForElement(this.klarnaPhoneNumberInput)
     I.fillField(this.klarnaPhoneNumberInput, credentials.phone)
@@ -476,8 +476,14 @@ class CheckoutPage {
     // Enter OTP code
     I.waitForElement(this.klarnaOtpCodeInput)
     I.fillField(this.klarnaOtpCodeInput, credentials.otp)
-    I.waitForElement(this.klarnaContinueWithPlan)
-    I.click(this.klarnaContinueWithPlan)
+    const elementCount = await I.grabNumberOfVisibleElements(
+      this.klarnaContinueWithPlan
+    )
+     if (elementCount > 0) {
+       I.click(this.klarnaContinueWithPlan)
+     }
+    // I.waitForElement(this.klarnaContinueWithPlan)
+    // I.click(this.klarnaContinueWithPlan)
 
     // Complete payment
     I.waitForElement(this.klarnaBuyBtn)
