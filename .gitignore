@@ -5,6 +5,7 @@ node_modules/
 output/
 reports/
 allure-results/
+allure-report/
 
 # TypeScript cache
 *.tsbuildinfo

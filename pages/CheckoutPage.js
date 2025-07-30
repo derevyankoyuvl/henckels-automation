@@ -7,163 +7,284 @@ const { I } = inject()
 class CheckoutPage {
   constructor() {
     // Guest locators
-    this.guestSignUpBtn = locate('[data-sid="contact_register"]').as('Guest Sign Up Button')
-    this.guestLoginBtn = locate('[data-sid="contact_login"]').as('Guest Login Button')
-    this.guestEmailInput = locate('[data-sid="contact_email"]').as('Guest Email Input')
+    this.guestSignUpBtn = locate('[data-sid="contact_register"]').as(
+      "Guest Sign Up Button"
+    )
+    this.guestLoginBtn = locate('[data-sid="contact_login"]').as(
+      "Guest Login Button"
+    )
+    this.guestEmailInput = locate('[data-sid="contact_email"]').as(
+      "Guest Email Input"
+    )
 
     // Shipping section locators
-    this.shippingSection = locate('[data-sentry-component="ShippingAddressSection"]').as('Shipping Section')
-    this.shippingFirstNameInput = locate('#firstName')
+    this.shippingSection = locate(
+      '[data-sentry-component="ShippingAddressSection"]'
+    ).as("Shipping Section")
+    this.shippingFirstNameInput = locate("#firstName")
       .inside(this.shippingSection)
-      .as('Shipping First Name Input')
-    this.shippingLastNameInput = locate('#lastName')
+      .as("Shipping First Name Input")
+    this.shippingLastNameInput = locate("#lastName")
       .inside(this.shippingSection)
-      .as('Shipping Last Name Input')
-    this.shippingAddressInput = locate('#address1')
+      .as("Shipping Last Name Input")
+    this.shippingAddressInput = locate("#address1")
       .inside(this.shippingSection)
-      .as('Shipping Address Input')
-    this.shippingAddress2Input = locate('#address2')
+      .as("Shipping Address Input")
+    this.shippingAddress2Input = locate("#address2")
       .inside(this.shippingSection)
-      .as('Shipping Address 2 Input')
-    this.shippingCityInput = locate('#city')
+      .as("Shipping Address 2 Input")
+    this.shippingCityInput = locate("#city")
       .inside(this.shippingSection)
-      .as('Shipping City Input')
+      .as("Shipping City Input")
     this.shippingStateSelect = locate('button[aria-label="stateCode"]')
       .inside(this.shippingSection)
-      .as('Shipping State Select')
-    this.shippingZipInput = locate('#postalCode')
+      .as("Shipping State Select")
+    this.shippingZipInput = locate("#postalCode")
       .inside(this.shippingSection)
-      .as('Shipping Zip Input')
-    this.shippingCountrySelect = locate('[data-sid="accountform_countrycode_1"]')
+      .as("Shipping Zip Input")
+    this.shippingCountrySelect = locate(
+      '[data-sid="accountform_countrycode_1"]'
+    )
       .inside(this.shippingSection)
-      .as('Shipping Country Select')
+      .as("Shipping Country Select")
     this.shippingPhoneInput = locate('[name="phone"]')
       .inside(this.shippingSection)
-      .as('Shipping Phone Input')
+      .as("Shipping Phone Input")
 
     // Billing section locators
-    this.billingSection = locate('[data-sentry-component="BillingAddressSection"]').as('Billing Section')
-    this.billingSameAsShippingCheckbox = locate('[data-sid="checkout_useshipping"]').as('Billing Same As Shipping Checkbox')
-    this.billingFirstNameInput = locate('#firstName')
+    this.billingSection = locate(
+      '[data-sentry-component="BillingAddressSection"]'
+    ).as("Billing Section")
+    this.billingSameAsShippingCheckbox = locate(
+      '[data-sid="checkout_useshipping"]'
+    ).as("Billing Same As Shipping Checkbox")
+    this.billingFirstNameInput = locate("#firstName")
       .inside(this.billingSection)
-      .as('Billing First Name Input')
-    this.billingLastNameInput = locate('#lastName')
+      .as("Billing First Name Input")
+    this.billingLastNameInput = locate("#lastName")
       .inside(this.billingSection)
-      .as('Billing Last Name Input')
-    this.billingAddressInput = locate('#address1')
+      .as("Billing Last Name Input")
+    this.billingAddressInput = locate("#address1")
       .inside(this.billingSection)
-      .as('Billing Address Input')
-    this.billingAddress2Input = locate('#address2')
+      .as("Billing Address Input")
+    this.billingAddress2Input = locate("#address2")
       .inside(this.billingSection)
-      .as('Billing Address 2 Input')
-    this.billingCityInput = locate('#city')
+      .as("Billing Address 2 Input")
+    this.billingCityInput = locate("#city")
       .inside(this.billingSection)
-      .as('Billing City Input')
+      .as("Billing City Input")
     this.billingStateSelect = locate('button[aria-label="stateCode"]')
       .inside(this.billingSection)
-      .as('Billing State Select')
-    this.billingZipInput = locate('#postalCode')
+      .as("Billing State Select")
+    this.billingZipInput = locate("#postalCode")
       .inside(this.billingSection)
-      .as('Billing Zip Input')
+      .as("Billing Zip Input")
     this.billingCountrySelect = locate('button[aria-label="countryCode"]')
       .inside(this.billingSection)
-      .as('Billing Country Select')
-    this.billingPhoneCountrySelect = locate('[data-sid="accountform_countrycode_1"]')
+      .as("Billing Country Select")
+    this.billingPhoneCountrySelect = locate(
+      '[data-sid="accountform_countrycode_1"]'
+    )
       .inside(this.billingSection)
-      .as('Billing Phone Country Select')
+      .as("Billing Phone Country Select")
     this.billingPhoneInput = locate('[name="phone"]')
       .inside(this.billingSection)
-      .as('Billing Phone Input')
-    
+      .as("Billing Phone Input")
+
     // Address normalosation modal
-    this.addressNormalisationModal = locate('[data-sentry-element="DialogContent"]')
-      .as("Address Normalisation Modal")
+    this.addressNormalisationModal = locate(
+      '[data-sentry-element="DialogContent"]'
+    ).as("Address Normalisation Modal")
     this.keepAddressBtn = locate('[data-sentry-element="Button"]')
       .inside(this.addressNormalisationModal)
       .first()
       .as("Keep Address Button")
 
     // Payment section locators
-    this.paymentSection = locate('#payment-section').as('Payment Section')
-    this.paymentCreditCardOption = locate('[for="opt-scheme"]').as('Credit Card Payment Option')
-    this.paymentGiftCardOption = locate('[for="opt-giftcard"]').as('Gift Card Payment Option')
-    this.paymentGooglePayOption = locate('[for="opt-googlepay"]').as('Google Pay Payment Option')
-    this.paymentPaypalOption = locate('[for="opt-paypal"]').as('PayPal Payment Option')
-    this.paymentApplePayOption = locate('[for="opt-applepay"]').as('Apple Pay Payment Option')
-    this.paymentKlarnaOption = locate('[for="opt-klarna_account"]').as('Klarna Payment Option')
+    this.paymentSection = locate("#payment-section").as("Payment Section")
+    this.paymentCreditCardOption = locate('[for="opt-scheme"]').as(
+      "Credit Card Payment Option"
+    )
+    this.paymentGiftCardOption = locate('[for="opt-giftcard"]').as(
+      "Gift Card Payment Option"
+    )
+    this.paymentGooglePayOption = locate('[for="opt-googlepay"]').as(
+      "Google Pay Payment Option"
+    )
+    this.paymentPaypalOption = locate('[for="opt-paypal"]').as(
+      "PayPal Payment Option"
+    )
+    this.paymentApplePayOption = locate('[for="opt-applepay"]').as(
+      "Apple Pay Payment Option"
+    )
+    this.paymentKlarnaOption = locate('[for="opt-klarna_account"]').as(
+      "Klarna Payment Option"
+    )
 
     // Payment frame locators
-    this.paymentCardNumberFrame = locate('[title="Iframe for card number"]').as('Card Number Frame')
-    this.paymentExpiryFrame = locate('[title="Iframe for expiry date"]').as('Expiry Date Frame')
-    this.paymentCvvFrame = locate('[title="Iframe for security code"]').as('CVV Frame')
-    this.paymentGCPinFrame = locate('[title="Iframe for pin"]').as('Gift Card Pin Frame')
+    this.paymentCardNumberFrame = locate('[title="Iframe for card number"]').as(
+      "Card Number Frame"
+    )
+    this.paymentExpiryFrame = locate('[title="Iframe for expiry date"]').as(
+      "Expiry Date Frame"
+    )
+    this.paymentCvvFrame = locate('[title="Iframe for security code"]').as(
+      "CVV Frame"
+    )
+    this.paymentGCPinFrame = locate('[title="Iframe for pin"]').as(
+      "Gift Card Pin Frame"
+    )
 
     // Payment input locators
-    this.paymentCardNumberInput = locate("input[id^='adyen-checkout-encryptedCardNumber']").as('Card Number Input')
-    this.paymentExpiryDateInput = locate("input[id^='adyen-checkout-encryptedExpiryDate']").as('Expiry Date Input')
-    this.paymentCvvInput = locate("input[id^='adyen-checkout-encryptedSecurityCode']").as('CVV Input')
-    this.paymentCardholderNameInput = locate('input[name="holderName"]').as('Cardholder Name Input')
-    this.paymentGiftCardNumberInput = locate('input[data-fieldtype="encryptedCardNumber"]').as('Gift Card Number Input')
-    this.paymentGiftCardPinInput = locate('input[data-fieldtype="encryptedSecurityCode"]').as('Gift Card Pin Input')
-    this.redeemGCBtn = locate('[data-sid="checkout_checkgiftcard"]').as('Redeem Gift Card Button')
+    this.paymentCardNumberInput = locate(
+      "input[id^='adyen-checkout-encryptedCardNumber']"
+    ).as("Card Number Input")
+    this.paymentExpiryDateInput = locate(
+      "input[id^='adyen-checkout-encryptedExpiryDate']"
+    ).as("Expiry Date Input")
+    this.paymentCvvInput = locate(
+      "input[id^='adyen-checkout-encryptedSecurityCode']"
+    ).as("CVV Input")
+    this.paymentCardholderNameInput = locate('input[name="holderName"]').as(
+      "Cardholder Name Input"
+    )
+    this.paymentGiftCardNumberInput = locate(
+      'input[data-fieldtype="encryptedCardNumber"]'
+    ).as("Gift Card Number Input")
+    this.paymentGiftCardPinInput = locate(
+      'input[data-fieldtype="encryptedSecurityCode"]'
+    ).as("Gift Card Pin Input")
+    this.redeemGCBtn = locate('[data-sid="checkout_checkgiftcard"]').as(
+      "Redeem Gift Card Button"
+    )
+    this.removeGCBtn = locate(
+      '[aria-label="Remove gift card payment method"]'
+    ).as("Remove Gift Card Button")
 
     // Order Summary locators
-    this.orderSummarySection = locate('[data-sentry-element="Card"]').as('Order Summary Section') // Need to improve locator
-    this.orderSummaryItemName = locate('[data-testid="order-item-name"]').as('Order Item Name') // Need to improve locator
-    this.orderSummaryItemPrice = locate('[data-testid="order-item-price"]').as('Order Item Price') // Need to improve locator
-    this.orderSummaryItemQuantity = locate('[data-testid="order-item-quantity"]').as('Order Item Quantity') // Need to improve locator
-    this.orderSummarySubtotalAmount = locate('[data-testid="order-subtotal"]').as('Order Subtotal Amount') // Need to improve locator
-    this.orderSummaryTaxAmount = locate('[data-testid="order-tax"]').as('Order Tax Amount') // Need to improve locator
-    this.orderSummaryShippingAmount = locate('[data-testid="order-shipping"]').as('Order Shipping Amount')// Need to improve locator
-    this.orderSummaryDiscountAmount = locate('[data-testid="order-discount"]').as('Order Discount Amount') // Need to improve locator
-    this.orderSummaryTotalAmount = locate('[data-testid="order-total"]').as('Order Total Amount') // Need to improve locator
+    this.orderSummarySection = locate('[data-sentry-element="Card"]').as(
+      "Order Summary Section"
+    ) // Need to improve locator
+    this.orderSummaryItemName = locate('[data-testid="order-item-name"]').as(
+      "Order Item Name"
+    ) // Need to improve locator
+    this.orderSummaryItemPrice = locate('[data-testid="order-item-price"]').as(
+      "Order Item Price"
+    ) // Need to improve locator
+    this.orderSummaryItemQuantity = locate(
+      '[data-testid="order-item-quantity"]'
+    ).as("Order Item Quantity") // Need to improve locator
+    this.orderSummarySubtotalAmount = locate(
+      '[data-testid="order-subtotal"]'
+    ).as("Order Subtotal Amount") // Need to improve locator
+    this.orderSummaryTaxAmount = locate('[data-testid="order-tax"]').as(
+      "Order Tax Amount"
+    ) // Need to improve locator
+    this.orderSummaryShippingAmount = locate(
+      '[data-testid="order-shipping"]'
+    ).as("Order Shipping Amount") // Need to improve locator
+    this.orderSummaryDiscountAmount = locate(
+      '[data-testid="order-discount"]'
+    ).as("Order Discount Amount") // Need to improve locator
+    this.orderSummaryTotalAmount = locate('[data-testid="order-total"]').as(
+      "Order Total Amount"
+    ) // Need to improve locator
 
     // Promo Code locators
-    this.promoCodeSection = locate('[data-sentry-component="PromoCode"]').as('Promo Code Section')
-    this.promoCodeInput = locate('[data-sid="checkout_promocode_input"]').as('Promo Code Input')
-    this.promoCodeApplyBtn = locate('[data-sid="checkout_promocode_apply"]').as('Promo Code Apply Button')
-    this.promoCodeMessage = locate('[data-testid="promo-message"]').as('Promo Code Message') // Need to improve locator
-    this.promoCodeRemoveBtn = locate('[data-testid="remove-promo"]').as('Promo Code Remove Button') // Need to improve locator
+    this.promoCodeSection = locate('[data-sentry-component="PromoCode"]').as(
+      "Promo Code Section"
+    )
+    this.promoCodeInput = locate('[data-sid="checkout_promocode_input"]').as(
+      "Promo Code Input"
+    )
+    this.promoCodeApplyBtn = locate('[data-sid="checkout_promocode_apply"]').as(
+      "Promo Code Apply Button"
+    )
+    this.promoCodeMessage = locate('[data-testid="promo-message"]').as(
+      "Promo Code Message"
+    ) // Need to improve locator
+    this.promoCodeRemoveBtn = locate('[data-testid="remove-promo"]').as(
+      "Promo Code Remove Button"
+    ) // Need to improve locator
 
     // Agreements locators
-    this.agreementsNewsletterCheckbox = locate('#newsSignUp-accept').as('Newsletter Checkbox')
-    this.agreementsTermsConditionsLnk = locate('#payment-section a[href*="terms"]').as('Terms and Conditions Link')
+    this.agreementsNewsletterCheckbox = locate("#newsSignUp-accept").as(
+      "Newsletter Checkbox"
+    )
+    this.agreementsTermsConditionsLnk = locate(
+      '#payment-section a[href*="terms"]'
+    ).as("Terms and Conditions Link")
 
     // Navigation locators
-    this.navigationContinueBtn = locate('//button[contains(text(), "Save & Continue")]').as('Continue Button')
-    this.navigationPlaceOrderBtn = locate('button[data-sid="checkout_paynow"]').as('Place Order Button')
-    this.navigationEditEmail = locate('[data-sentry-component="ContactInfoCard"] [title="Edit customer information"]').as('Edit Email Button')
-    this.navigationEditShippingBtn = locate('[data-sentry-component="ShippingAddressSection"] [title="Edit customer information"]').as('Edit Shipping Button')
+    this.continueBtn = locate(
+      '//button[contains(text(), "Save & Continue")]'
+    ).as("Continue Button")
+    this.placeOrderBtn = locate(
+      'button[data-sid="checkout_paynow"]'
+    ).as("Place Order Button")
+    this.editEmail = locate(
+      '[data-sentry-component="ContactInfoCard"] [title="Edit customer information"]'
+    ).as("Edit Email Button")
+    this.editShippingBtn = locate(
+      '[data-sentry-component="ShippingAddressSection"] [title="Edit customer information"]'
+    ).as("Edit Shipping Button")
+    this.confirmPayment = locate(
+      'button[data-sid="checkout_giftcard_button"]'
+    ).as("Confirm Payment Button")
 
     // PayPal locators
-    this.paypalFrame = 'iframe[title="PayPal"]';
-    this.paypalEmailInput = locate('#email').as('PayPal Email Input')
-    this.paypalPasswordInput = locate('#password').as('PayPal Password Input')
-    this.paypalNextBtn = locate('#btnNext').as('PayPal Next Button')
-    this.paypalLoginBtn = locate('#btnLogin').as('PayPal Login Button')
-    this.paypalSubmitBtn = locate('button[data-testid="submit-button-initial"]').as('PayPal Submit Button')
-    this.paypalPayButton = locate('[aria-label="PayPal"]').as('PayPal Pay Button')
+    this.paypalFrame = 'iframe[title="PayPal"]'
+    this.paypalEmailInput = locate("#email").as("PayPal Email Input")
+    this.paypalPasswordInput = locate("#password").as("PayPal Password Input")
+    this.paypalNextBtn = locate("#btnNext").as("PayPal Next Button")
+    this.paypalLoginBtn = locate("#btnLogin").as("PayPal Login Button")
+    this.paypalSubmitBtn = locate(
+      'button[data-testid="submit-button-initial"]'
+    ).as("PayPal Submit Button")
+    this.paypalPayButton = locate('[aria-label="PayPal"]').as(
+      "PayPal Pay Button"
+    )
 
     // Klarna locators
-    this.klarnaPhoneNumberInput = locate('#phone').as('Klarna Phone Number Input')
-    this.klarnaContinueBtn = locate('#onContinue').as('Klarna Continue Button')
-    this.klarnaOtpCodeInput = locate('#otp_field').as('Klarna OTP Code Input')
-    this.klarnaContinueWithPlan = locate('[data-testid="pick-plan"]').as('Klarna Continue With Plan')
-    this.klarnaSubmitBtn = locate('#klarna-container button').as('Klarna Submit Button')
-    this.klarnaBuyBtn = locate('#buy_button').as('Klarna Buy Button')
+    this.klarnaPhoneNumberInput = locate("#phone").as(
+      "Klarna Phone Number Input"
+    )
+    this.klarnaContinueBtn = locate("#onContinue").as("Klarna Continue Button")
+    this.klarnaOtpCodeInput = locate("#otp_field").as("Klarna OTP Code Input")
+    this.klarnaContinueWithPlan = locate('[data-testid="pick-plan"]').as(
+      "Klarna Continue With Plan"
+    )
+    this.klarnaSubmitBtn = locate("#klarna-container button").as(
+      "Klarna Submit Button"
+    )
+    this.klarnaBuyBtn = locate("#buy_button").as("Klarna Buy Button")
 
     // Google Pay locators
-    this.googlePaySubmitBtn = locate('#gpay-button-online-api-id').as('Google Pay Submit Button')
-    this.googlePayModal = locate('[role="dialog"]').as('Google Pay Modal')
-    this.googlePayEmailInput = locate("input[type='email']").as('Google Pay Email Input')
-    this.googlePayNextBtn = locate('#identifierNext').as('Google Pay Next Button')
-    this.googlePayPasswordInput = locate("input[type='password']").as('Google Pay Password Input')
-    this.googlePayPasswordNextBtn = locate('#passwordNext').as('Google Pay Password Next Button')
-    this.googlePayBtn = locate('.smGnHb [jsname="LgbsSe"]').as('Google Pay Button')
+    this.googlePaySubmitBtn = locate("#gpay-button-online-api-id").as(
+      "Google Pay Submit Button"
+    )
+    this.googlePayModal = locate('[role="dialog"]').as("Google Pay Modal")
+    this.googlePayEmailInput = locate("input[type='email']").as(
+      "Google Pay Email Input"
+    )
+    this.googlePayNextBtn = locate("#identifierNext").as(
+      "Google Pay Next Button"
+    )
+    this.googlePayPasswordInput = locate("input[type='password']").as(
+      "Google Pay Password Input"
+    )
+    this.googlePayPasswordNextBtn = locate("#passwordNext").as(
+      "Google Pay Password Next Button"
+    )
+    this.googlePayBtn = locate('.smGnHb [jsname="LgbsSe"]').as(
+      "Google Pay Button"
+    )
 
     // Dynamic locators
-    this.stateOption = (stateName) => locate('option').withText(stateName).as(`${stateName} State Option`)
-    this.countryOption = (countryName) => locate('option').withText(countryName).as(`${countryName} Country Option`)
+    this.stateOption = (stateName) =>
+      locate("option").withText(stateName).as(`${stateName} State Option`)
+    this.countryOption = (countryName) =>
+      locate("option").withText(countryName).as(`${countryName} Country Option`)
 
     // Constants
     this.PAYMENT_METHODS = {
@@ -221,21 +342,21 @@ class CheckoutPage {
     const elementCount = await I.grabNumberOfVisibleElements(
       this.addressNormalisationModal
     )
-     if (elementCount > 0) {
-       I.waitForElement(this.keepAddressBtn)
-       I.click(this.keepAddressBtn)
-       I.waitForElement(this.navigationContinueBtn)
-       I.click(this.navigationContinueBtn)
-     }
+    if (elementCount > 0) {
+      I.waitForElement(this.keepAddressBtn)
+      I.click(this.keepAddressBtn)
+      I.waitForElement(this.continueBtn)
+      I.click(this.continueBtn)
+    }
   }
 
   editShippingAddress() {
-    I.waitForElement(this.navigationEditShippingBtn)
-    I.click(this.navigationEditShippingBtn)
+    I.waitForElement(this.editShippingBtn)
+    I.click(this.editShippingBtn)
   }
 
   // ===== BILLING INFORMATION METHODS =====
-  
+
   useSameAsShipping() {
     I.waitForElement(this.billingSameAsShippingCheckbox)
     I.checkOption(this.billingSameAsShippingCheckbox)
@@ -306,12 +427,12 @@ class CheckoutPage {
     within({ frame: this.paymentCardNumberFrame }, () => {
       I.fillField(this.paymentCardNumberInput, card.number)
     })
-    
+
     // Fill expiry date
     within({ frame: this.paymentExpiryFrame }, () => {
       I.fillField(this.paymentExpiryDateInput, card.expiryDate)
     })
-    
+
     // Fill CVV
     within({ frame: this.paymentCvvFrame }, () => {
       I.fillField(this.paymentCvvInput, card.cvv)
@@ -320,23 +441,24 @@ class CheckoutPage {
     // MORE EXPLICIT CONTEXT RESET
     I.switchTo(null) // Switch to main frame explicitly
     I.switchTo() // Additional switchTo call
-    
+
     // Fill cardholder name (outside iframe)
     I.fillField(this.paymentCardholderNameInput, card.cardholderName)
   }
 
-  fillGiftCardInformation(cardData) {
+  fillGiftCardInformation(cardType, cardData) {
+    const card = cardData[cardType]
     // Wait for payment frames to load
     I.waitForElement(this.paymentCardNumberFrame)
 
     // Fill card number
     within({ frame: this.paymentCardNumberFrame }, () => {
-      I.fillField(this.paymentGiftCardNumberInput, cardData.number)
+      I.fillField(this.paymentGiftCardNumberInput, card.number)
     })
-    
+
     // Fill pin
     within({ frame: this.paymentGCPinFrame }, () => {
-      I.fillField(this.paymentGiftCardPinInput, cardData.pin)
+      I.fillField(this.paymentGiftCardPinInput, card.pin)
     })
 
     // MORE EXPLICIT CONTEXT RESET
@@ -371,12 +493,18 @@ class CheckoutPage {
   // ===== ORDER COMPLETION METHODS =====
 
   submitOrder() {
-    I.wait(3) // Need to improve this
+    // I.wait(3) // Need to improve this
     // Wait for iframe context to clear by checking main page elements
-    I.waitForElement(this.navigationPlaceOrderBtn)
+    I.waitForElement(this.placeOrderBtn)
 
     // Ensure place order button is enabled and click
-    I.click(this.navigationPlaceOrderBtn)
+    I.click(this.placeOrderBtn)
+  }
+
+  submitOrderWithGiftCard() {
+    I.waitForElement(this.removeGCBtn)
+    I.waitForElement(this.confirmPayment)
+    I.click(this.confirmPayment)
   }
 
   submitOrderWithPayPal(credentials = {}) {
@@ -426,8 +554,8 @@ class CheckoutPage {
 
   // Order Completion Methods
   continueToNextStep() {
-    I.waitForElement(this.navigationContinueBtn)
-    I.click(this.navigationContinueBtn)
+    I.waitForElement(this.continueBtn)
+    I.click(this.continueBtn)
   }
 
   // Verification Methods
@@ -479,9 +607,9 @@ class CheckoutPage {
     const elementCount = await I.grabNumberOfVisibleElements(
       this.klarnaContinueWithPlan
     )
-     if (elementCount > 0) {
-       I.click(this.klarnaContinueWithPlan)
-     }
+    if (elementCount > 0) {
+      I.click(this.klarnaContinueWithPlan)
+    }
     // I.waitForElement(this.klarnaContinueWithPlan)
     // I.click(this.klarnaContinueWithPlan)
 
