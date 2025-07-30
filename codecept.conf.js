@@ -48,6 +48,7 @@ exports.config = {
     SignInPage: "./pages/signInPage.js",
     Navigation: "./components/navigation.js",
     cardData: "./data/creditCards.json",
+    gcData: "./data/giftCards.json",
     messages: "./data/messages.js",
   },
   // Plugins

@@ -15,9 +15,15 @@
     "test:parallel": "codeceptjs run-multiple parallel",
     "test:multi-device": "codeceptjs run-multiple multi_device",
     "test:headless": "HEADLESS=true codeceptjs run",
-    "report:generate": "allure generate output/allure-results --clean",
-    "report:open": "allure open reports/allure-report",
-    "test:docker": "docker-compose up --build --abort-on-container-exit"
+    "report:generate": "allure generate allure-results --clean -o allure-report",
+    "report:open": "allure open allure-report",
+    "report:serve": "allure serve allure-results",
+    "test:docker": "docker-compose up --build --abort-on-container-exit",
+    "test:poc": "codeceptjs run tests/proofofconcept/poc_test.js",
+    "test:poc-report": "npm run test:poc && npm run report:generate",
+    "test:poc-full": "npm run test:poc; npm run report:generate && npm run report:open",
+    "test:poc-ca": "COUNTRY=ca codeceptjs run tests/proofofconcept/poc_test.js",
+    "test:poc-mobile": "SCREEN_SIZE=mobile codeceptjs run tests/proofofconcept/poc_test.js"
   },
   "keywords": [],
   "author": "",

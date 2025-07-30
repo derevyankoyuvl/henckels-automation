@@ -9,6 +9,7 @@ const {
   RegisterPage,
   Navigation,
   cardData,
+  gcData,
   messages,
 } = inject()
 
@@ -34,11 +35,11 @@ Scenario(
     // Test no results scenario
     Navigation.openSearchDialog()
     Navigation.enterSearchQuery("test")
-    await ProductCatalogPage.verifySearchResults("test")
+    await ProductCatalogPage.verifySearchReturnsNoResults("test")
     // Test valid search scenario
     Navigation.openSearchDialog()
     Navigation.enterSearchQuery("thermometer")
-    await ProductCatalogPage.verifySearchResults("thermometer")
+    await ProductCatalogPage.verifySearchReturnsResults("thermometer")
   }
 )
 
@@ -121,6 +122,28 @@ Scenario.skip("Complete order flow with GooglePay payment", async () => {
   await CheckoutPage.keepEnteredAddress()
   CheckoutPage.selectPaymentMethod("googlepay")
   CheckoutPage.submitOrderWithGooglePay()
+  ConfirmationPage.verifyOrderCompletion(
+    shippingData.firstName + " " + shippingData.lastName
+  )
+})
+
+Scenario("Complete order flow with Gift Card payment", async () => {
+  const shippingData = await I.generateShippingData()
+  await Navigation.openCategory(0)
+  ProductCatalogPage.verifyPageLoaded()
+  await ProductCatalogPage.openProductDetailsPage(0)
+  ProductDetailsPage.verifyPageLoaded()
+  ProductDetailsPage.addToCart()
+  CartPage.verifyCartDialogLoaded()
+  await CartPage.proceedToCheckout()
+  CheckoutPage.verifyPageLoaded()
+  CheckoutPage.fillGuestEmail(shippingData)
+  CheckoutPage.fillShippingInformation(shippingData)
+  CheckoutPage.continueToNextStep()
+  await CheckoutPage.keepEnteredAddress()
+  CheckoutPage.selectPaymentMethod("gift_card")
+  CheckoutPage.fillGiftCardInformation("full", gcData)
+  CheckoutPage.submitOrderWithGiftCard()
   ConfirmationPage.verifyOrderCompletion(
     shippingData.firstName + " " + shippingData.lastName
   )
