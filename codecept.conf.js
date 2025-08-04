@@ -1,5 +1,6 @@
 require("dotenv").config();
 const { setHeadlessWhen, setCommonPlugins } = require("@codeceptjs/configure");
+const { OrderDetailsHelper } = require("./helpers/OrderDetailsHelper");
 
 // export HEADLESS=true && npx codeceptjs run
 //setHeadlessWhen(process.env.HEADLESS);
@@ -35,6 +36,10 @@ exports.config = {
     ScreenshotHelper: {
       require: "./helpers/ScreenshotHelper.js",
     },
+    OrderDetailsHelper: {
+      require: "./helpers/OrderDetailsHelper.js",
+      outputDir: "./output/orderDetails", // optional: specify custom output directory
+    },
   },
   include: {
     I: "./steps_file.js",
@@ -59,7 +64,6 @@ exports.config = {
       outputDir: "allure-results", // Directory where Allure results will be stored
     },
   },
-
   // Disable problematic features
   bootstrap: null,
   mocha: {
