@@ -194,13 +194,13 @@ class CheckoutPage {
     this.promoCodeSection = locate('[data-sentry-component="PromoCode"]').as(
       "Promo Code Section"
     )
-    this.promoCodeInput = locate('[data-sid="checkout_promocode_input"]').as(
+    this.promoCodeInput = locate('[data-sid="checkout_promocode_input"]').last().as(
       "Promo Code Input"
     )
     this.promoCodeApplyBtn = locate('[data-sid="checkout_promocode_apply"]').as(
       "Promo Code Apply Button"
     )
-    this.promoCodeMessage = locate('[data-testid="promo-message"]').as(
+    this.promoCodeMessage = locate("form.w-full>div>div").last().as(
       "Promo Code Message"
     ) // Need to improve locator
     this.promoCodeRemoveBtn = locate('[data-testid="remove-promo"]').as(
@@ -219,9 +219,9 @@ class CheckoutPage {
     this.continueBtn = locate(
       '//button[contains(text(), "Save & Continue")]'
     ).as("Continue Button")
-    this.placeOrderBtn = locate(
-      'button[data-sid="checkout_paynow"]'
-    ).as("Place Order Button")
+    this.placeOrderBtn = locate('button[data-sid="checkout_paynow"]').as(
+      "Place Order Button"
+    )
     this.editEmail = locate(
       '[data-sentry-component="ContactInfoCard"] [title="Edit customer information"]'
     ).as("Edit Email Button")
@@ -347,6 +347,8 @@ class CheckoutPage {
       I.click(this.keepAddressBtn)
       I.waitForElement(this.continueBtn)
       I.click(this.continueBtn)
+      // I.waitForElement(this.placeOrderBtn)
+      // I.click(this.placeOrderBtn)
     }
   }
 
