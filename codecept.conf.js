@@ -1,14 +1,12 @@
-require("dotenv").config();
-const { setHeadlessWhen, setCommonPlugins } = require("@codeceptjs/configure");
-const { OrderDetailsHelper } = require("./helpers/OrderDetailsHelper");
-
-// export HEADLESS=true && npx codeceptjs run
-//setHeadlessWhen(process.env.HEADLESS);
+require("dotenv").config()
+const { setHeadlessWhen, setCommonPlugins } = require("@codeceptjs/configure")
+const { OrderDetailsHelper } = require("./helpers/OrderDetailsHelper")
 
 // enable all common plugins https://github.com/codeceptjs/configure#setcommonplugins
-setCommonPlugins();
+setHeadlessWhen(process.env.CI)
+setCommonPlugins()
 
-const ENV = process.env.NODE_ENV || "staging";
+const ENV = process.env.NODE_ENV || "staging"
 
 exports.config = {
   tests: "./tests/**/*_test.js",
@@ -29,10 +27,10 @@ exports.config = {
     DataHelper: {
       require: "./helpers/DataHelper.js",
     },
-    MailSlurpHelper: {
-      require: "./helpers/MailSlurpHelper.js",
-      apiKey: process.env.MAILSLURP_API_KEY, // Store your API key in environment variables
-    },
+    // MailSlurpHelper: {
+    //   require: "./helpers/MailSlurpHelper.js",
+    //   apiKey: process.env.MAILSLURP_API_KEY, // Store your API key in environment variables
+    // },
     ScreenshotHelper: {
       require: "./helpers/ScreenshotHelper.js",
     },
@@ -96,6 +94,12 @@ exports.config = {
       browsers: [
         {
           browser: "chromium",
+          args: [
+            "--no-sandbox",
+            "--disable-dev-shm-usage",
+            "--disable-web-security",
+            "--disable-features=VizDisplayCompositor",
+          ],
           windowSize: "1920x1080",
         },
         {
@@ -112,14 +116,14 @@ exports.config = {
 }
 
 function getWindowSize() {
-  const size = process.env.SCREEN_SIZE || "desktop";
+  const size = process.env.SCREEN_SIZE || "desktop"
   const sizes = {
     //desktop: "2560x1440",
     desktop: "1440x900",
     tablet: "1024x768",
     mobile: "375x667",
-  };
-  return sizes[size] || sizes.desktop;
+  }
+  return sizes[size] || sizes.desktop
 }
 
 function getBaseUrl() {
@@ -127,6 +131,6 @@ function getBaseUrl() {
     next: "https://next.henckels.io",
     staging: "https://staging.henckels.io",
     prod: "https://www.henckels.com",
-  };
-  return urls[ENV] || urls.prod;
+  }
+  return urls[ENV] || urls.prod
 }

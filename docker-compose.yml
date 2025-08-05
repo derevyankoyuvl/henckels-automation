@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  poc-tests:
+    build: .
+    volumes:
+      - ./output:/app/output
+      - ./reports:/app/reports
+    environment:
+      # Основні налаштування
+      - CI=true
+      - NODE_ENV=staging
+      - HEADLESS=true
+      - BROWSER=chromium
+      - SCREEN_SIZE=${SCREEN_SIZE:-desktop}
+      - COUNTRY=${COUNTRY:-us}
+      
+      # Директорії для звітів
+      - ALLURE_RESULTS_DIR=output/allure-results
+      - ALLURE_REPORT_DIR=reports/allure-report
+      
+      # Паролі та доступи (УВАГА: чутливі дані!)
+      - HENCKELS_PROD_PASSWORD=${HENCKELS_PROD_PASSWORD}
+      - PAYPAL_TEST_EMAIL=${PAYPAL_TEST_EMAIL}
+      - PAYPAL_TEST_PASSWORD=${PAYPAL_TEST_PASSWORD}
+      - KLARNA_PHONE_US=${KLARNA_PHONE_US}
+      - KLARNA_PHONE_CA=${KLARNA_PHONE_CA}
+      - KLARNA_OTP=${KLARNA_OTP}
+      
+      # API ключі (якщо потрібні для тестів)
+      - MAILSLURP_API_KEY=${MAILSLURP_API_KEY}
+      - GIVEX_COMPANY_CODE=${GIVEX_COMPANY_CODE}
+      - GIVEX_USER_ID=${GIVEX_USER_ID}
+      - GIVEX_API_URL=${GIVEX_API_URL}
+    command: npm run test:poc
