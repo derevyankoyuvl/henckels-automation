@@ -24,9 +24,9 @@ class DataHelper extends Helper {
   // Helper function to generate valid Canadian postal codes
  generateValidCanadianPostalCode() {
   // Valid letters for Canadian postal codes (excluding D, F, I, O, Q, U)
-  const validLetters = 'ABCEGHIJKLMNPRSTUVWXYZ'.split('');
+  const validLetters = 'ABCEGHJKLMNPRSTVWXYZ'.split('');
   // First letter cannot be W or Z
-  const firstLetterValid = 'ABCEGHIJKLMNPRSTUV'.split('');
+  const firstLetterValid = 'ABCEGHJKLMNPRSTV'.split('');
   
   const firstLetter = faker.helpers.arrayElement(firstLetterValid);
   const firstDigit = faker.number.int({ min: 0, max: 9 })

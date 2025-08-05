@@ -72,10 +72,33 @@ module.exports = function () {
       }
     },
 
+    async handleSelectCountryModal() {
+      this.wait(1) // Wait for modal to appear
+      try {
+        // Use grabNumberOfVisibleElements - this won't throw
+        const modalCount = await this.grabNumberOfVisibleElements(
+          '[data-sentry-element="DialogContent"]'
+        )
+
+        if (modalCount === 0) {
+          return false
+        }
+
+        this.click('[alt="Canada-flag"]')
+        // Wait for modal to disappear
+        this.waitForInvisible('[data-sentry-element="DialogContent"]', 5)
+
+        this.wait(2) // Wait for page to load after authentication
+        return true
+      } catch (error) {
+        return false
+      }
+    },
+
     async handleAllModals() {
       // Handle Prod Access Control first (if present)
       await this.handleProdAccessControl()
-
+      await this.handleSelectCountryModal()
       // Then handle Privacy modal
       await this.handleUsercentricModal()
     },
