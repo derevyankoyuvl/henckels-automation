@@ -35,6 +35,7 @@ jobs:
   basic-tests:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         country: [us, ca]
         screen_size: [desktop, mobile]
