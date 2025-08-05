@@ -38,8 +38,8 @@ Scenario(
     await ProductCatalogPage.verifySearchReturnsNoResults("test")
     // Test valid search scenario
     Navigation.openSearchDialog()
-    Navigation.enterSearchQuery("thermometer")
-    await ProductCatalogPage.verifySearchReturnsResults("thermometer")
+    Navigation.enterSearchQuery("shear")
+    await ProductCatalogPage.verifySearchReturnsResults("shear")
   }
 )
 

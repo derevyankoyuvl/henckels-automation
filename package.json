@@ -20,7 +20,7 @@
     "report:serve": "allure serve allure-results",
     "test:docker": "docker-compose up --build --abort-on-container-exit",
     "test:poc": "codeceptjs run tests/proofofconcept/poc_test.js",
-    "test:poc:headless": "HEADLESS=true COUNTRY=${COUNTRY} SCREEN_SIZE=${SCREEN_SIZE} codeceptjs run tests/proofofconcept/poc_test.js",
+    "test:poc:headless": "HEADLESS=true COUNTRY=${COUNTRY} SCREEN_SIZE=${SCREEN_SIZE} codeceptjs run tests/proofofconcept/poc_test.js --debug",
     "test:poc:mobile": "SCREEN_SIZE=mobile codeceptjs run tests/proofofconcept/poc_test.js",
     "test:poc:ca": "COUNTRY=ca codeceptjs run tests/proofofconcept/poc_test.js",
     "test:poc:docker": "docker run --rm -v $(pwd)/output:/app/output henckels-tests npm run test:poc",

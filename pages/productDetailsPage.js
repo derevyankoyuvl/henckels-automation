@@ -96,9 +96,11 @@ class ProductDetailsPage {
     // I.seeElement(this.productTitle)
     // I.seeElement(this.productPrice)
     // I.seeElement(this.productImages)
-    
-    // Verify key components
-    I.seeElement(this.sectionsBazaarVoice)
+    const isUS = process.env.COUNTRY === "us"
+    if (isUS) {
+      // Verify Bazar Voice component
+      I.seeElement(this.sectionsBazaarVoice)
+    }
   }
 }
 
