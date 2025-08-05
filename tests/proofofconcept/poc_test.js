@@ -18,6 +18,8 @@ Feature("Henckels US - E-commerce Core Functionality")
 Before(async ({ I, HomePage }) => {
   // Common setup that applies to all scenarios
   await HomePage.visit(process.env.COUNTRY)
+  const url = await I.grabCurrentUrl()
+  console.log(`Current URL: ${url}`)
 })
 
 Scenario("User registration should require captcha validation", async () => {
