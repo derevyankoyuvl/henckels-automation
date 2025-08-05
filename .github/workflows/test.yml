@@ -37,8 +37,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        country: [ca]
-        screen_size: [desktop]
+        country: [us, ca]
+        screen_size: [desktop, mobile]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
