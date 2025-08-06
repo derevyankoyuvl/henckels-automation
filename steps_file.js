@@ -32,188 +32,132 @@ module.exports = function () {
       return code
     },
 
-    async handleProdAccessControl() {
-      //console.log("🔐 Checking for Prod Access Control modal...");
+    // async handleProdAccessControl() {
+    //   //console.log("🔐 Checking for Prod Access Control modal...");
 
-      try {
-        // Use grabNumberOfVisibleElements - this won't throw
-        const modalCount = await this.grabNumberOfVisibleElements(
-          '//h2[contains(text(), "Prod Access Control")] | //div[contains(text(), "Prod Access Control")]'
-        )
+    //   try {
+    //     // Use grabNumberOfVisibleElements - this won't throw
+    //     const modalCount = await this.grabNumberOfVisibleElements(
+    //       '//h2[contains(text(), "Prod Access Control")] | //div[contains(text(), "Prod Access Control")]'
+    //     )
 
-        if (modalCount === 0) {
-          return false
-        }
+    //     if (modalCount === 0) {
+    //       return false
+    //     }
 
-        // Get password from environment variable
-        const password = process.env.HENCKELS_PROD_PASSWORD
+    //     // Get password from environment variable
+    //     const password = process.env.HENCKELS_PROD_PASSWORD
 
-        if (!password) {
-          return false
-        }
+    //     if (!password) {
+    //       return false
+    //     }
 
-        // Fill password and submit
-        this.fillField('//input[@name="password"]', password)
-        this.click(
-          '//button[@type="submit"] | //button[contains(text(), "Submit")]'
-        )
+    //     // Fill password and submit
+    //     this.fillField('//input[@name="password"]', password)
+    //     this.click(
+    //       '//button[@type="submit"] | //button[contains(text(), "Submit")]'
+    //     )
 
-        // Wait for modal to disappear
-        this.waitForInvisible(
-          '//h1[contains(text(), "Prod Access Control")]',
-          5
-        )
-        //console.log("✅ Prod Access Control modal handled successfully");
+    //     // Wait for modal to disappear
+    //     this.waitForInvisible(
+    //       '//h1[contains(text(), "Prod Access Control")]',
+    //       5
+    //     )
+    //     //console.log("✅ Prod Access Control modal handled successfully");
 
-        this.wait(2) // Wait for page to load after authentication
-        return true
-      } catch (error) {
-        return false
-      }
-    },
+    //     this.wait(2) // Wait for page to load after authentication
+    //     return true
+    //   } catch (error) {
+    //     return false
+    //   }
+    // },
 
-    async handleSelectCountryModal() {
-      this.wait(1) // Wait for modal to appear
-      try {
-        // Use grabNumberOfVisibleElements - this won't throw
-        const modalCount = await this.grabNumberOfVisibleElements(
-          '[data-sentry-element="DialogContent"]'
-        )
+    // async handleSelectCountryModal() {
+    //   this.wait(1) // Wait for modal to appear
+    //   try {
+    //     // Use grabNumberOfVisibleElements - this won't throw
+    //     const modalCount = await this.grabNumberOfVisibleElements(
+    //       '[data-sentry-element="DialogContent"]'
+    //     )
 
-        if (modalCount === 0) {
-          return false
-        }
+    //     if (modalCount === 0) {
+    //       return false
+    //     }
 
-        this.click('[alt="Canada-flag"]')
-        // Wait for modal to disappear
-        this.waitForInvisible('[data-sentry-element="DialogContent"]', 5)
+    //     this.click('[alt="Canada-flag"]')
+    //     // Wait for modal to disappear
+    //     this.waitForInvisible('[data-sentry-element="DialogContent"]', 5)
 
-        this.wait(2) // Wait for page to load after authentication
-        return true
-      } catch (error) {
-        return false
-      }
-    },
+    //     this.wait(2) // Wait for page to load after authentication
+    //     return true
+    //   } catch (error) {
+    //     return false
+    //   }
+    // },
 
-    async handleAllModals() {
-      // Handle Prod Access Control first (if present)
-      await this.handleProdAccessControl()
-      await this.handleSelectCountryModal()
-      // Then handle Privacy modal
-      await this.handleUsercentricModal()
-    },
+    // async handleAllModals() {
+    //   // Handle Prod Access Control first (if present)
+    //   await this.handleProdAccessControl()
+    //   await this.handleSelectCountryModal()
+    //   // Then handle Privacy modal
+    //   await this.handleUsercentricModal()
+    // },
 
-    async handleUsercentricModalWithWait() {
-      //console.log("🔒 Waiting for Usercentrics modal...");
+    // async _handleUsercentrics() {
+    //   // console.log(
+    //   //   "🔒 Handling Usercentrics privacy modal with executeScript..."
+    //   // );
+    //   await this.waitForElement("#usercentrics-cmp-ui", 10)
+    //   const handled = await this.executeScript(() => {
 
-      try {
-        // Use 'this' instead of 'I' in custom methods
-        this.waitForElement("#usercentrics-cmp-ui", 10)
-        //console.log("Modal container found, checking for shadow DOM...");
+    //     const modal = document.querySelector("#usercentrics-cmp-ui")
+    //     if (modal && modal.shadowRoot) {
+    //       console.log("Found Usercentrics modal with shadow root")
 
-        // Wait a bit more for shadow DOM to initialize
-        this.wait(2)
+    //       // Try to find the accept button using the selectors we saw in DOM
+    //       const selectors = [
+    //         'button[data-testid="uc-accept-all-button"]',
+    //         "button#accept",
+    //         'button[aria-label="ACCEPT ALL"]',
+    //         "button.accept.uc-accept-button",
+    //         'button[data-action-type="accept"]',
+    //       ]
 
-        // Now try to click using executeScript
-        const result = await this.executeScript(() => {
-          const modal = document.querySelector("#usercentrics-cmp-ui")
+    //       for (const selector of selectors) {
+    //         const button = modal.shadowRoot.querySelector(selector)
+    //         if (button) {
+    //           //console.log("Found accept button with selector:", selector);
+    //           button.click()
+    //           return { success: true, selector: selector }
+    //         }
+    //       }
 
-          if (!modal) {
-            return { error: "Modal not found" }
-          }
+    //       // Fallback: find any button with "ACCEPT" text
+    //       const allButtons = modal.shadowRoot.querySelectorAll("button")
+    //       for (const button of allButtons) {
+    //         if (
+    //           button.textContent.includes("ACCEPT") ||
+    //           button.getAttribute("aria-label")?.includes("ACCEPT")
+    //         ) {
+    //           //console.log("Found accept button by text content");
+    //           button.click()
+    //           return { success: true, selector: "text-based" }
+    //         }
+    //       }
 
-          if (!modal.shadowRoot) {
-            return { error: "Shadow root not found" }
-          }
+    //       return { success: false, error: "Button not found in shadow DOM" }
+    //     }
 
-          // From the DOM structure we saw, try the exact button
-          const acceptButton = modal.shadowRoot.querySelector(
-            'button[data-testid="uc-accept-all-button"]'
-          )
+    //     return { success: false, error: "Modal or shadow root not found" }
+    //   })
 
-          if (acceptButton) {
-            acceptButton.click()
-            return { success: true, method: "data-testid" }
-          }
-
-          // Fallback to ID
-          const acceptById = modal.shadowRoot.querySelector("button#accept")
-          if (acceptById) {
-            acceptById.click()
-            return { success: true, method: "id" }
-          }
-
-          return { error: "Accept button not found" }
-        })
-
-        if (result.success) {
-          this.wait(2)
-          return true
-        } else {
-          return false
-        }
-      } catch (error) {
-        return false
-      }
-    },
-
-    async handleUsercentricModal() {
-      // console.log(
-      //   "🔒 Handling Usercentrics privacy modal with executeScript..."
-      // );
-      await this.waitForElement("#usercentrics-cmp-ui", 10)
-      const handled = await this.executeScript(() => {
-        // Use 'this' instead of 'I'
-        // Find the shadow host
-
-        const modal = document.querySelector("#usercentrics-cmp-ui")
-        if (modal && modal.shadowRoot) {
-          console.log("Found Usercentrics modal with shadow root")
-
-          // Try to find the accept button using the selectors we saw in DOM
-          const selectors = [
-            'button[data-testid="uc-accept-all-button"]',
-            "button#accept",
-            'button[aria-label="ACCEPT ALL"]',
-            "button.accept.uc-accept-button",
-            'button[data-action-type="accept"]',
-          ]
-
-          for (const selector of selectors) {
-            const button = modal.shadowRoot.querySelector(selector)
-            if (button) {
-              //console.log("Found accept button with selector:", selector);
-              button.click()
-              return { success: true, selector: selector }
-            }
-          }
-
-          // Fallback: find any button with "ACCEPT" text
-          const allButtons = modal.shadowRoot.querySelectorAll("button")
-          for (const button of allButtons) {
-            if (
-              button.textContent.includes("ACCEPT") ||
-              button.getAttribute("aria-label")?.includes("ACCEPT")
-            ) {
-              //console.log("Found accept button by text content");
-              button.click()
-              return { success: true, selector: "text-based" }
-            }
-          }
-
-          return { success: false, error: "Button not found in shadow DOM" }
-        }
-
-        return { success: false, error: "Modal or shadow root not found" }
-      })
-
-      if (handled.success) {
-        this.wait(2) // Use 'this' instead of 'I'
-        return true
-      } else {
-        return false
-      }
-    },
+    //   if (handled.success) {
+    //     this.wait(2) // Use 'this' instead of 'I'
+    //     return true
+    //   } else {
+    //     return false
+    //   }
+    // },
 
     async inspectCurrentPage() {
       const url = await this.grabCurrentUrl()

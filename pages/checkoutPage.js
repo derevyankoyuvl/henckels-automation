@@ -321,7 +321,9 @@ class CheckoutPage {
     I.fillField(this.shippingAddressInput, shippingData.address)
 
     // Tab to trigger address validation
-    I.pressKey("Tab")
+    I.wait(1) // Allow autocomplete to appear
+    I.pressKey("Escape") // Dismiss any autocomplete dropdown
+    I.wait(0.5) // Allow dropdown to disappear
 
     // Fill optional address line 2
     if (shippingData.address2) {

@@ -114,6 +114,7 @@ class ProductCatalogPage {
     const cardElements = await I.grabNumberOfVisibleElements(this.productCard)
 
     if (cardElements === 0) {
+    //if (cardElements > 0) {
       throw new Error(
         `Expected search results for "${searchValue}" but got no results`
       )

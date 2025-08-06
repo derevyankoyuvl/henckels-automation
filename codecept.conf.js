@@ -53,6 +53,7 @@ exports.config = {
     cardData: "./data/creditCards.json",
     gcData: "./data/giftCards.json",
     messages: "./data/messages.js",
+    modalHandler: "./components/modalHandler.js",
   },
   // Plugins
   plugins: {
@@ -88,7 +89,29 @@ exports.config = {
   multiple: {
     parallel: {
       chunks: parseInt(process.env.CHUNKS) || 1,
-      browsers: ["chromium"],
+      browsers: [
+        // ✅ Solution: browser config objects
+        {
+          browser: "chromium",
+          args: ["--no-sandbox", "--disable-dev-shm-usage"],
+          windowSize: "1920x1080",
+        },
+        {
+          browser: "chromium",
+          args: ["--no-sandbox", "--disable-dev-shm-usage"],
+          windowSize: "1920x1080",
+        },
+        {
+          browser: "chromium",
+          args: ["--no-sandbox", "--disable-dev-shm-usage"],
+          windowSize: "1920x1080",
+        },
+        {
+          browser: "chromium",
+          args: ["--no-sandbox", "--disable-dev-shm-usage"],
+          windowSize: "1920x1080",
+        },
+      ],
     },
     multi_device: {
       browsers: [

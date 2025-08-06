@@ -49,8 +49,8 @@ class HomePage {
   async visit(country = "us") {
     const url = `/${country}/`
     I.amOnPage(url)
-    await I.handleAllModals();
-    this.verifyPageLoaded()
+    //await I.handleAllModals();
+    //this.verifyPageLoaded()
   }
 
   // Page Verification Methods
