@@ -233,7 +233,7 @@ class CheckoutPage {
     ).as("Confirm Payment Button")
 
     // PayPal locators
-    this.paypalFrame = 'iframe[title="PayPal"]'
+    this.paypalFrame = 'iframe[title="PayPal-paypal"]'
     this.paypalEmailInput = locate("#email").as("PayPal Email Input")
     this.paypalPasswordInput = locate("#password").as("PayPal Password Input")
     this.paypalNextBtn = locate("#btnNext").as("PayPal Next Button")
